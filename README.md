@@ -16,8 +16,23 @@ The flow uses control commands based on ngspice to construct the Non-Linear Dela
 
 ## What is Non Linear Delay Model(NLDM)?
 
-### Define Cell Rise, Cell Fall, Rise Transition and Fall Transition? 
+NLDM is derived from SPICE characterizations and is a highly reliable timing model. The table model is referred to as an NLDM and is used to measure the
+delay, performance slew, or other timing checks. Most of the cell libraries used table models to specify the delay and timing checks for different cell timing arcs.
 
+For different combinations of input at the cell input pin and multiple output capacitance at the cell output pin, the table provides the delay through the
+cell. In a two-dimensional array, where the two independent variables are the input transition and the capacitance of the output load and the entries in the table 
+are the delays.
+The characterization is performed using the ngspice open source circuit simulator.
+### Define Cell Rise, Cell Fall, Rise Transition and Fall Transition? 
+![](images/rise_fall_wave.jpg)
+
+The time taken by a signal to increase from 20 percent to 80 percent of its maximum value is known as transition delay or slew. This is referred to as "rise time".
+Similarly, it is possible to describe "fall time" as the time taken by a signal to fall from 80 to 20 percent of its maximum value.
+
+The time taken for a signal to propagate through a gate or net is the propagation delay.
+Therefore, you can call it a "Gate or Cell Delay" if it is a cell.
+The time it takes for a signal at the input pin to impact the output signal at the output pin is the propagation delay of a gate or cell.
+A delay of 50 percent of the input transition to the corresponding 50 percent of the output transition is calculated for any gate propagation.
 ## Proposed Flow for Timing Characterization?
 
 ## Explaining Flow using OR Gate example
