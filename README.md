@@ -1,18 +1,18 @@
 # Semi-Automated Non Linear Delay Model Generator using NGSPICE
 The flow uses control commands based on ngspice to construct the Non-Linear Delay Model(NLDM) for the custom standard cell. This repo aims to introduce an approach of using open-source resources to do custom cell characterization.
-
+#### Under Development
 - [Semi-Automated Non Linear Delay Model Generator using NGSPICE](#semi-automated-non-linear-delay-model-generator-using-ngspice)
-  - [Prerequisite](#prerequisite)
+      - [Under Development](#under-development)
   - [What is Non Linear Delay Model(NLDM)?](#what-is-non-linear-delay-modelnldm)
     - [Define Cell Rise, Cell Fall, Rise Transition and Fall Transition?](#define-cell-rise-cell-fall-rise-transition-and-fall-transition)
-  - [Proposed Flow for Timing Characterization?](#proposed-flow-for-timing-characterization)
+  - [Proposed Flow for Timing Characterization](#proposed-flow-for-timing-characterization)
   - [Explaining Flow using OR Gate example](#explaining-flow-using-or-gate-example)
     - [NGSPICE File Setup](#ngspice-file-setup)
     - [Process for Text File Creation](#process-for-text-file-creation)
     - [Timing Block .lib Format Generation](#timing-block-lib-format-generation)
-    - [Comparison of Timing values from Skywater130nm PDK](#comparison-of-timing-values-from-skywater130nm-pdk)
-
-## Prerequisite 
+      - [Run these command in terminal](#run-these-command-in-terminal)
+      - [Result:](#result)
+  - [Future Works:](#future-works)
 
 ## What is Non Linear Delay Model(NLDM)?
 
@@ -42,8 +42,10 @@ Considering the rise/fall of both input and output, we are faced with four propa
   
 All the delays will have different values, or in some cases same values.
  
-## Proposed Flow for Timing Characterization?
-
+## Proposed Flow for Timing Characterization
+Currently Simulation Setup is done manually for testing the NGSPICE scripts results.
+![Characterization Flow](images/algo_cal_reduce.png)           
+** Note: Focused on Combination Circuit Timing **
 ## Explaining Flow using OR Gate example
 Start with simple schematic design using Xcircuit or any schematic capture tool and generate spice file subckt as shown below               
 ![Spice File](images/spice_file.png)
@@ -56,17 +58,34 @@ This setup is divided into three sections:
 * **Setting up Power Supplies and loads:** Power Supplies VDD and VSS as per the .lib file voltage requirement(1.8V). The Pulse supply type should be provided to the input pin which is considered related to the Output and other input pins need to be biased as they are not affecting the output. Assign a load capacitor(c1) as shown below:
 ![Test Harness(File Name: or2.cir](images/test_harness.png)
 
-* **Control Commands:** These are the commands provided by ngspice to do sequence simulation with different sets of device parameter values and also helps in post-simulation analysis. Commands shown below for measuring different timing figures:
+* **Control Commands:** These are the commands provided by ngspice to do sequence simulation with different sets of device parameter values and helps in post-simulation analysis. Commands shown below are for measuring the different timing figures:
 ![Timing Measurement Commands(File Name: or2.cir](images/timing_measure.png)
 
-Also, these commands store these values in a .txt( in 'text_files' folder) for verification and generating .lib based timing format.
+Also, `echo` command with `>>` used store these values in the 'text_files' folder: User uses these file for verification and generating .lib based timing block.
+
 ### Process for Text File Creation
 Follow the Steps:
   1. Make sure text_files folder is empty, otherwise delete the files using `rm` command.
-  2. `cd` to the root folder(in which sky130nm.lib exists) and type on the terminal `ngspice ngspice or2_custom/or2_0/or2.cir`
-  3. Check all the five files are generated into the text_files folder. This particular folder consisting of different timing .txt file is used by the python file for generating      the .lib type timing block. 
-### Timing Block .lib Format Generation
-Run this command in the terminal `./scripts/timing.py -loc text_files/ -pin A`
-Also, for help, type `./scripts/timing.py -h`
+  2. `cd` to the root folder(in which sky130nm.lib exists) and type on the terminal `ngspice or2_custom/or2_0/or2.cir`
+  3. Check all the five files are generated into the text_files folder. This particular folder consisting of different timing .txt file is used by the python file for generating the .lib type timing block. 
 
-### Comparison of Timing values from Skywater130nm PDK
+**Note: All terminal commands are run from the root directory of this repo**
+
+### Timing Block .lib Format Generation
+
+#### Run these command in terminal 
+
+```
+chmod 775 ./scripts/timing.py
+./scripts/timing.py -loc text_files/ -pin A
+``` 
+
+Also, for help, type `./scripts/timing.py -h`
+#### Result:                
+![Timing Block](images/result_timing.png)
+
+## Future Works:
+* Make the script more flexible for different combinational circuits.
+* Able to read .lib configuration file for extracting the ptc thresholds.
+* Find a way to make it a fully-automatic script that could run simulations and could be able to setup simulation environment.
+
