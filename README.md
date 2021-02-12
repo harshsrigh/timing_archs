@@ -33,6 +33,15 @@ The time taken for a signal to propagate through a gate or net is the propagatio
 Therefore, you can call it a "Gate or Cell Delay" if it is a cell.
 The time it takes for a signal at the input pin to impact the output signal at the output pin is the propagation delay of a gate or cell.
 A delay of 50 percent of the input transition to the corresponding 50 percent of the output transition is calculated for any gate propagation.
+
+Considering the rise/fall of both input and output, we are faced with four propagation delays: 
+  1. 50% of input rise to 50% of output rise.
+  2. 50% of input rise to 50% of output fall.
+  3. 50% of input fall to 50% of output rise.
+  4. 50% of input fall to 50% of output fall.
+  
+All the delays will have different values, or in some cases same values.
+ 
 ## Proposed Flow for Timing Characterization?
 
 ## Explaining Flow using OR Gate example
