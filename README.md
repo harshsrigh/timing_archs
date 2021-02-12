@@ -43,9 +43,9 @@ Considering the rise/fall of both input and output, we are faced with four propa
 All the delays will have different values, or in some cases same values.
  
 ## Proposed Flow for Timing Characterization
-Currently Simulation Setup is done manually for testing the NGSPICE scripts results.
-![Characterization Flow](images/algo_cal_reduce.png)           
-** Note: Focused on Combination Circuit Timing **
+Currently Simulation Setup is done manually for testing the NGSPICE scripts results.                                          
+![Characterization Flow](images/algo_cal_reduce.png)                                                      
+**Note: Focused on Combination Circuit Timing**
 ## Explaining Flow using OR Gate example
 Start with simple schematic design using Xcircuit or any schematic capture tool and generate spice file subckt as shown below               
 ![Spice File](images/spice_file.png)
