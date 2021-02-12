@@ -66,21 +66,21 @@ Also, `echo` command with `>>` used store these values in the 'text_files' folde
 ### Process for Text File Creation
 Follow the Steps:
   1. Make sure text_files folder is empty, otherwise delete the files using `rm` command.
-  2. `cd` to the root folder(in which sky130nm.lib exists) and type on the terminal `ngspice or2_custom/or2_0/or2.cir`
+  2. `cd` to the root folder(in which sky130nm.lib exists) and type on the terminal       
+      `ngspice or2_custom/or2_0/or2.cir`
   3. Check all the five files are generated into the text_files folder. This particular folder consisting of different timing .txt file is used by the python file for generating the .lib type timing block. 
 
 **Note: All terminal commands are run from the root directory of this repo**
 
 ### Timing Block .lib Format Generation
 
-#### Run these command in terminal 
-
+#### Run these command in terminal    
 ```
 chmod 775 ./scripts/timing.py
 ./scripts/timing.py -loc text_files/ -pin A
-``` 
-
-Also, for help, type `./scripts/timing.py -h`
+```   
+Also, for help, type    
+`./scripts/timing.py -h`
 #### Result:                
 ![Timing Block](images/result_timing.png)
 
