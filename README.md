@@ -28,7 +28,14 @@ Once this file is created, we are ready to perform NGSPICE simulation.
 
 ### NGSPICE File Setup
 This setup is divided into three sections:
-1. **Adding Required Libraries and Sub-circuit:**
+* **Adding Required Libraries and Sub-circuit:** '.include' commands are used for adding the subcircuit and skywater nfet and pfet libraries.
+* **Setting up Power Supplies and loads:** Power Supplies VDD and VSS as per the .lib file voltage requirement(1.8V). The Pulse supply type should be provided to the input pin which is considered related to the Output and other input pins need to be biased as they are not affecting the output. Assign a load capacitor(c1) as shown below:
+![Test Harness(File Name: or2.cir](images/test_harness.png)
+
+* **Control Commands:** These are the commands provided by ngspice to do sequence simulation with different sets of device parameter values and also helps in post-simulation analysis. Commands shown below for measuring different timing figures:
+![Timing Measurement Commands(File Name: or2.cir](images/timing_measure.png)
+
+Also, these commands store these values in a .txt( in 'text_files' folder) for verification and generating .lib based timing format.
 ### Process for Text File Creation
 
 ### Timing Block .lib Format Generation
