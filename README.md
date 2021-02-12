@@ -43,6 +43,6 @@ Follow the Steps:
   3. Check all the five files are generated into the text_files folder. This particular folder consisting of different timing .txt file is used by the python file for generating      the .lib type timing block. 
 ### Timing Block .lib Format Generation
 Run this command in the terminal `./scripts/timing.py -loc text_files/`
-Also, for help, type `./scripts/timing.py -h'
+Also, for help, type `./scripts/timing.py -h`
 
 ### Comparison of Timing values from Skywater130nm PDK
