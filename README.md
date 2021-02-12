@@ -37,7 +37,10 @@ This setup is divided into three sections:
 
 Also, these commands store these values in a .txt( in 'text_files' folder) for verification and generating .lib based timing format.
 ### Process for Text File Creation
-
+Follow the Steps:
+  1. Make sure text_files folder is empty, otherwise delete the files using `rm` command.
+  2. `cd` to the root folder(in which sky130nm.lib exists) and type on the terminal `ngspice ngspice or2_custom/or2_0/or2.cir'.
+  3. Check all the five files are generated into the text_files folder. This particular folder consisting of different timing .txt file is used by the python file for generating      the .lib type timing block. 
 ### Timing Block .lib Format Generation
 
 ### Comparison of Timing values from Skywater130nm PDK
