@@ -43,9 +43,9 @@ Considering the rise/fall of both input and output, we are faced with four propa
 All the delays will have different values, or in some cases same values.
  
 ## Proposed Flow for Timing Characterization
-Currently Simulation Setup is done manually for testing the NGSPICE scripts results.
-![Characterization Flow](images/algo_cal_reduce.png)           
-** Note: Focused on Combination Circuit Timing **
+Currently Simulation Setup is done manually for testing the NGSPICE scripts results.                                          
+![Characterization Flow](images/algo_cal_reduce.png)                                                      
+**Note: Focused on Combination Circuit Timing**
 ## Explaining Flow using OR Gate example
 Start with simple schematic design using Xcircuit or any schematic capture tool and generate spice file subckt as shown below               
 ![Spice File](images/spice_file.png)
@@ -66,21 +66,21 @@ Also, `echo` command with `>>` used store these values in the 'text_files' folde
 ### Process for Text File Creation
 Follow the Steps:
   1. Make sure text_files folder is empty, otherwise delete the files using `rm` command.
-  2. `cd` to the root folder(in which sky130nm.lib exists) and type on the terminal `ngspice or2_custom/or2_0/or2.cir`
+  2. `cd` to the root folder(in which sky130nm.lib exists) and type on the terminal       
+      `ngspice or2_custom/or2_0/or2.cir`
   3. Check all the five files are generated into the text_files folder. This particular folder consisting of different timing .txt file is used by the python file for generating the .lib type timing block. 
 
 **Note: All terminal commands are run from the root directory of this repo**
 
 ### Timing Block .lib Format Generation
 
-#### Run these command in terminal 
-
+#### Run these command in terminal    
 ```
 chmod 775 ./scripts/timing.py
 ./scripts/timing.py -loc text_files/ -pin A
-``` 
-
-Also, for help, type `./scripts/timing.py -h`
+```   
+Also, for help, type    
+`./scripts/timing.py -h`
 #### Result:                
 ![Timing Block](images/result_timing.png)
 
