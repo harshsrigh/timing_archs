@@ -1,1 +1,5 @@
 /.vscode
+*.data
+*.plt
+*.out
+*__pycache__

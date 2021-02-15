@@ -1,0 +1,8 @@
+* Nand2 Sub-circuit @ W=0.42u L=0.15u(nmos) 
+.option scale = 0.01u
+.subckt sky130_fd_sc_hd__nand2_1 A B VGND VNB VPB VPWR Y
+X0 a_112_69# A Y VNB sky130_fd_pr__nfet_01v8 w=84 l=15
+X1 VGND B a_112_69# VNB sky130_fd_pr__nfet_01v8 w=84 l=15
+X2 Y A VPWR VPB sky130_fd_pr__pfet_01v8 w=126 l=15
+X3 VPWR B Y VPB sky130_fd_pr__pfet_01v8 w=126 l=15
+.ends

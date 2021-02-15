@@ -125,17 +125,20 @@ def read_spicetxt(filepath, in_size=7):
                 output_cap.append(liberty_float(out_cap_val))
 
                 timing_vector.append(liberty_float(agr_data[-1]))
-
+    # Size of Cap Vector
+    cap_size = len(list(set(output_cap)))
+    # Size of Input Delay Vector
+    delay_size = len(input_delay)
     # Resizing timing 1-D vector to 2-D
     timing_vector_2d = np.array(timing_vector)
-    timing_vector_2d.resize(in_size, in_size)
+    timing_vector_2d.resize(delay_size, cap_size)
 
-    return input_delay, output_cap[:in_size], timing_vector_2d
+    return input_delay, output_cap[:cap_size], timing_vector_2d
 
 
-def timing_generator(files_folder, related_pin='A'):
+def timing_generator(files_folder, unate, related_pin='A'):
     """Generates the timing block in .lib format  """
-
+    # TODO: Make Global variable
     attributes_names = ['cell_fall', 'cell_rise',
                         'fall_transition', 'rise_transition']
     timing_tables = []
@@ -150,9 +153,9 @@ def timing_generator(files_folder, related_pin='A'):
         {timing_tables[0]}
         {timing_tables[1]}
         {timing_tables[2]}
-        related_pin : "{related_pin}";
+        related_pin : "{related_pin.upper()}";
         {timing_tables[3]}
-        timing_sense : "positive_unate";
+        timing_sense : "{unate}";
         timing_type : "combinational";
         }} """
 
@@ -161,14 +164,15 @@ def timing_generator(files_folder, related_pin='A'):
 
 def gen_lib(in_rises, out_caps, timing_table, attr_name):
     """Format the each attribute content in .lib format """
-
+    in_size = len(in_rises)
+    out_size = len(out_caps)
     in_rises_str = ', '.join(in_rises)
     out_caps_str = ', '.join(out_caps)
     tables_data = ['"{}"'.format(', '.join(timing_table[num]))
                    for num in range(len(timing_table))]
     timing_str = ' \ \n \t\t\t'.join(tables_data)
 
-    timing_cell = f"""{attr_name} ("del_1_7_7") {{
+    timing_cell = f"""{attr_name} ("del_1_{in_size}_{out_size}") {{
                     index_1("{in_rises_str}");
                     index_2("{out_caps_str}"); 
                     values({timing_str});
@@ -190,6 +194,6 @@ if __name__ == '__main__':
 
     
     argus = parser.parse_args()
-
-    timing_info = timing_generator(argus.loc, related_pin=argus.pin)
+    unate = 'undefined'
+    timing_info = timing_generator(argus.loc, unate, related_pin=argus.pin)
     print(timing_info)

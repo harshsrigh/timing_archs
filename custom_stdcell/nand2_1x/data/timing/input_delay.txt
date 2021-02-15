@@ -1,0 +1,15 @@
+input_delay:0.06ns
+actual_rise_slew:0.059976
+actual_fall_slew:0.05998
+input_delay:0.18ns
+actual_rise_slew:0.179928
+actual_fall_slew:0.17992
+input_delay:0.42ns
+actual_rise_slew:0.419832
+actual_fall_slew:0.41984
+input_delay:0.6ns
+actual_rise_slew:0.59976
+actual_fall_slew:0.59976
+input_delay:1.2ns
+actual_rise_slew:1.19952
+actual_fall_slew:1.19952
