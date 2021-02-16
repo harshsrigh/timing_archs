@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from config import *
 from os import path
-from os import mkdir
+from os import makedirs
 import os, re
 import scripts.truths as truths
 import scripts.timing as timing
@@ -16,7 +16,9 @@ def ng_postscript(meas_type, active_pin):
     if meas_type == 'timing':
         
         working_folder = path.join(output_folder,'timing')
-        control_str = f"""foreach in_delay {input_delay}
+        control_str = f"""
+        let run  = 0
+        foreach in_delay {input_delay}
 
     * Initiating Text Files in folder data
     echo "input_delay:$in_delay" >> {working_folder}/input_delay.txt
@@ -26,21 +28,34 @@ def ng_postscript(meas_type, active_pin):
     echo "input_delay:$in_delay" >> {working_folder}/rise_transition.txt
 
     * 1.666 to match the slew rate
-    let actual_rtime = $in_delay*1.666
-    
-    * Changing the V2 Supply Rise time as per the Input Rise Time vector
-    alter @V{active_pin}[pulse] = [ 0 {VDD} 0 $&actual_rtime $&actual_rtime 50ns 100ns ]
-    alter CLOAD 0.0005p
-    
+    let actual_rtime = $in_delay*1.666   
+   
     * Input Vector - Load Cap values(index2)
     foreach out_cap {output_caps}
+         reset
+        
+        * Changing the V2 Supply Rise time as per the Input Rise Time vector
+        alter @V{active_pin}[pulse] = [ 0 {VDD} 0 $&actual_rtime $&actual_rtime 50ns 100ns ]
         
         * Changing the C1 value as per the foreach list
         alter CLOAD $out_cap
         
-        tran 1n 200ns
+        tran {sim_step} 300ns
         run
 
+        reset
+        * Verification of INPUT RISE TIME
+        meas tran ts1 when v({active_pin})=1.44 RISE=1 
+        meas tran ts2 when v({active_pin})=0.36 RISE=1
+        meas tran ts3 when v({active_pin})=1.44 FALL=1 
+        meas tran ts4 when v({active_pin})=0.36 FALL=1
+        let RISE_IN_SLEW = (ts1-ts2)/{time_unit}
+        let FALL_IN_SLEW = (ts4-ts3)/{time_unit}
+        echo "actual_rise_slew:$&RISE_IN_SLEW" >> {working_folder}/input_delay.txt
+        echo "actual_fall_slew:$&FALL_IN_SLEW" >> {working_folder}/input_delay.txt
+
+
+        print run
         * Measuring Cell Fall Time @ 50% of VDD(1.8V) 
         meas tran tinfall when v({active_pin})=0.9 FALL=1 
         meas tran tofall when v(Y)=0.9 FALL=1
@@ -50,6 +65,7 @@ def ng_postscript(meas_type, active_pin):
             meas tran tofall when v(Y)=0.9 FALL=1
             let cfall = abs(tofall-tinfall)/{time_unit}
         end
+        print cfall
         echo "out_cap:$out_cap:cell_fall:$&cfall" >> {working_folder}/cell_fall.txt
 
         * Measuring Cell Rise Time @ 50% of VDD(1.8V) 
@@ -61,32 +77,27 @@ def ng_postscript(meas_type, active_pin):
             meas tran torise when v(Y)=0.9 RISE=1
             let crise = abs(tinrise-torise)/{time_unit}
         end
+        print crise
         echo "out_cap:$out_cap:cell_rise:$&crise" >> {working_folder}/cell_rise.txt
 
         * Measuring Fall Transion Time @ 80-20% of VDD(1.8V) 
         meas tran ft1 when v(Y)=1.44 FALL=2 
         meas tran ft2 when v(Y)=0.36 FALL=2
         let fall_tran = (ft2-ft1)/{time_unit}
+        print fall_tran
         echo "out_cap:$out_cap:fall_transition:$&fall_tran" >> {working_folder}/fall_transition.txt
         
         * Measuring Rise Transion Time @ 20-80% of VDD(1.8V) 
         meas tran rt1 when v(Y)=1.44 RISE=2 
         meas tran rt2 when v(Y)=0.36 RISE=2
-        let rise_tran = (rt1-rt2)/{time_unit}
+        let rise_tran = ((rt1-rt2)/{time_unit})
+        print rise_tran
         echo "out_cap:$out_cap:rise_transition:$&rise_tran" >> {working_folder}/rise_transition.txt
-
+        let run = run + 1
         * plot a y
     end
     
-    * Verification of INPUT RISE TIME
-    meas tran ts1 when v({active_pin})=1.44 RISE=1 
-    meas tran ts2 when v({active_pin})=0.36 RISE=1
-    meas tran ts3 when v({active_pin})=1.44 FALL=1 
-    meas tran ts4 when v({active_pin})=0.36 FALL=1
-    let RISE_IN_SLEW = (ts1-ts2)/{time_unit}
-    let FALL_IN_SLEW = (ts4-ts3)/{time_unit}
-    echo "actual_rise_slew:$&RISE_IN_SLEW" >> {working_folder}/input_delay.txt
-    echo "actual_fall_slew:$&FALL_IN_SLEW" >> {working_folder}/input_delay.txt
+
 
 end"""
     return control_str, working_folder
@@ -149,6 +160,7 @@ CLoad {output_pins} 0 0.005p
 * Control Generations
 .control
 {control_text}
+rusage
 quit
 .endc"""
     
@@ -161,7 +173,7 @@ def ngspice_lunch(file_loc, working_folder):
     """Launches NGspice and delete old simulation files"""
     
     try:
-        mkdir(working_folder)
+        makedirs(working_folder)
     except OSError:
         print ("Creation of the directory %s failed" % working_folder)
         try:
@@ -171,11 +183,11 @@ def ngspice_lunch(file_loc, working_folder):
             # print(f'Deleted Files in {working_folder}')
         except OSError:
             print(f'Manually delete Files in {working_folder}')
-            exit(0)
+            exit()
     else:
         print ("Successfully created the directory %s " % working_folder)
 
-    subprocess.call(["ngspice", file_loc])
+    subprocess.call(["ngspice", '-b', '-r rawfile.raw' , file_loc])
     print('Finished Simulation')
 
 
