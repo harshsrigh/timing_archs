@@ -50,11 +50,7 @@ def liberty_float(f):
     try:
         f = float(f)
     except (ValueError, TypeError):
-        f = None
         raise ValueError("%r is not a float" % f)
-
-    if isinstance(f, bool):
-        f = None
 
     WIDTH = len(str(0.0083333333))
 
@@ -111,7 +107,7 @@ def read_spicetxt(filepath, in_size=7):
     # TODO: To format the vectors as per unit required in .lib file
     for per_in_data in data.split('\n'):
         agr_data = per_in_data.split(':')
-
+        # print(agr_data)
         if len(agr_data) == 2:
 
             if agr_data[0] == 'input_delay':
