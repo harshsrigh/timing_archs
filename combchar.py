@@ -16,6 +16,7 @@ def ng_postscript(meas_type, active_pin):
     if meas_type == 'timing':
         
         working_folder = path.join(output_folder,'timing')
+        # TODO: Shift this text based template to Jinja Templates if necessary
         control_str = f"""
         let run  = 0
         foreach in_delay {input_delay}
@@ -200,7 +201,7 @@ def timing_lib(card, timing_list):
     
     logic_func = conv_logical(logic_function)
     lib_file = path.join(cell_directory, 'timing.lib')
-    timing_txt = '\n'.join(timing_list)    
+    timing_txt = '\n\t'.join(timing_list)    
     cell_card = f"""cell("{card}"){{
         pin ('{output_pins}') {{
         direction: "output";

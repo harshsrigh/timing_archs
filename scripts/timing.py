@@ -166,7 +166,7 @@ def gen_lib(in_rises, out_caps, timing_table, attr_name):
     out_caps_str = ', '.join(out_caps)
     tables_data = ['"{}"'.format(', '.join(timing_table[num]))
                    for num in range(len(timing_table))]
-    timing_str = ' \ \n \t\t\t'.join(tables_data)
+    timing_str = ', \ \n \t\t\t'.join(tables_data)
 
     timing_cell = f"""{attr_name} ("del_1_{in_size}_{out_size}") {{
                     index_1("{in_rises_str}");
