@@ -37,7 +37,7 @@ All the delays will have different values, or in some cases same values.
   1. [nand2_1x](custom_stdcell/nand2_1x/nand2.spice) |  [ Timing Lib File](custom_stdcell/nand2_1x/timing.lib)        
   2. [nand2_2x](custom_stdcell/nand2_2x/nand2_2x.spice) |  [ Timing Lib File](custom_stdcell/nand2_2x/timing.lib)     
       <img src="custom_stdcell/nand2_2x/nand2_2x_out.png" alt="nand2_2x" width="350"/>  
-  3. [nand3_1x](custom_stdcell/nand3_1x/nand3_1x.spice) |  [ Timing Lib File](custom_stdcell/nand3_1x/timing.lib)
+  3. [nand3_1x](custom_stdcell/nand3_1x/nand3_1x.spice) |  [ Timing Lib File](custom_stdcell/nand3_1x/timing.lib)             
       <img src="custom_stdcell/nand3_1x/nand3_1x_out.png" alt="nand3_1x" width="350"/>      
   4. [nand3_2x](custom_stdcell/nand3_2x/nand3_2x.spice) |  [ Timing Lib File](custom_stdcell/nand3_2x/timing.lib)       
       <img src="custom_stdcell/nand3_2x/nand3_2x_out.png" alt="nand3_2x" width="350"/>   
