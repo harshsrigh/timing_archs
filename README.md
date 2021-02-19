@@ -5,6 +5,11 @@ The flow uses control commands based on ngspice to construct the Non-Linear Dela
       - [Under Development](#under-development)
   - [What is Non Linear Delay Model(NLDM)?](#what-is-non-linear-delay-modelnldm)
   - [Custom Standard Cell List and Pre-layout Results](#custom-standard-cell-list-and-pre-layout-results)
+  - [Instruction to generate Timing liberty file](#instruction-to-generate-timing-liberty-file)
+    - [To Configure config.py](#to-configure-configpy)
+    - [Execute 'combchar.py'](#execute-combcharpy)
+    - [Ideal Run Output](#ideal-run-output)
+  - [Future Works:](#future-works)
 
 ## What is Non Linear Delay Model(NLDM)?
 
@@ -55,3 +60,42 @@ All the delays will have different values, or in some cases same values.
   10.  [o2111ai_1x](custo_stdcell/../custom_stdcell/o2111ai_1x/o2111ai_1x.spice)  |  [ Timing Lib File](custom_stdcell/o2111ai_1x/timing.lib)     
       <img src="custom_stdcell/o2111ai_1x/o2111ai_1x_out.png" alt="o2111ai_1x_out" width="350"/>      
 
+## Instruction to generate Timing liberty file
+
+### To Configure config.py
+1. Enter custom cell folder and spice file that needs to be characterized.
+2. Mention input vectors for input delay and load capacitor.
+3. Mention Input and Output pins.
+4. Enter Logic function.
+
+**Nand4_2x example:**           
+File Configuration:
+``` py
+library_directory = ''
+library_file = path.join(library_directory, 'sky130nm.lib')
+cell_directory = 'custom_stdcell/nand4_2x/' # Enter cell folder
+spice_file = path.join(cell_directory, "nand4_2x.spice") # Enter .spice file
+output_folder =  path.join(cell_directory, "data")
+```             
+Input Vector:
+``` py
+input_delay = '0.01n 0.023n 0.0531329n 0.122474n 0.282311n 0.650743n 1.5n' # Only put the unit(do not include sec suffix)
+output_caps = '0.0005p 0.0012105800p 0.002931p 0.00709641p 0.0171815p 0.0415991p 0.100718p' # Only put the unit(do not include Farad suffix)
+input_pins = 'A B C D' # TODO: extract from .lef files
+output_pins = 'Y' # TODO: extract from .lef files
+logic_function = 'not (A and B and C and D)' # Use keyword 'not', 'and' , 'or'
+```         
+
+### Execute 'combchar.py'       
+Enter command into terminal: `python3 combchar.py`
+
+### Ideal Run Output        
+``` 
+Finished Simulation
+Check:  custom_stdcell/nand4_2x/timing.lib
+```
+## Future Works: 
+**(Focused on Combination circuits only without tri-state/HiZ)**
+* Perform Layout on these 10 cells.
+* Setup Power calculation harness for leakage power and internal power(total power - dynamic power)
+* Internal pin capacitance calculations
