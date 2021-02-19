@@ -1,4 +1,4 @@
-cell("sky130_fd_sc_hd__nand2_1"){
+cell("vsdcell_nand2_1x"){
         pin ('y') {
         direction: "output";
         function: "! (a & b)";
