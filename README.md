@@ -69,7 +69,7 @@ All the delays will have different values, or in some cases same values.
 4. Enter Logic function.
 
 **Nand4_2x example:**           
-File Configuration:
+File Configuration: [nand4_2x config.py](config.py)         
 ``` py
 library_directory = ''
 library_file = path.join(library_directory, 'sky130nm.lib')
