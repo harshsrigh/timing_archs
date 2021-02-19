@@ -1,0 +1,11 @@
+.subckt vsd_nand2_2x  A B VGND VPWR Y
+X0 Y A NET1 VGND sky130_fd_pr__nfet_01v8 w=0.65u l=0.15u
+X1 Y A NET1 VGND sky130_fd_pr__nfet_01v8 w=0.65u l=0.15u
+X2 NET1 B VGND VGND sky130_fd_pr__nfet_01v8 w=0.65u l=0.15u
+X3 NET1 B VGND VGND sky130_fd_pr__nfet_01v8 w=0.65u l=0.15u
+
+X4 Y A VPWR VPWR sky130_fd_pr__pfet_01v8 w=1.51u l=0.15u
+X5 Y B VPWR VPWR sky130_fd_pr__pfet_01v8 w=1.51u l=0.15u
+X6 Y B VPWR VPWR sky130_fd_pr__pfet_01v8 w=1.51u l=0.15u
+X7 Y A VPWR VPWR sky130_fd_pr__pfet_01v8 w=1.51u l=0.15u
+.ends
