@@ -83,10 +83,10 @@ All the delays will have different values, or in some cases same values.
     logic_function = 'not (A and B and C and D)' # Use keyword 'not', 'and' , 'or'
     ```         
 
-2. Execute 'combchar.py'       
+2. **Execute python file**       
     Enter command into terminal: `python3 combchar.py`
 
-3. Ideal Run Final Output: Takes approx 4-5 mins for four pin cell                   
+3. **Ideal Run Final Output**: Takes approx 4-5 mins for four pin cell                   
     <img src="images/script_out.png" alt="script_out" width="350"/>
 ## Future Works: 
 **(Focused on Combination circuits only without tri-state/HiZ)**
