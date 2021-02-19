@@ -3,3 +3,6 @@
 *.plt
 *.out
 *__pycache__
+test_harness.cir
+power_harness.cir
+custom_stdcell/a22oi_1x
