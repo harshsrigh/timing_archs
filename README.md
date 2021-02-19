@@ -1,18 +1,10 @@
-# Semi-Automated Non Linear Delay Model Generator using NGSPICE
+# Custom Standard Cell Design with a automated Non-Linear-Delay-Model Generator
 The flow uses control commands based on ngspice to construct the Non-Linear Delay Model(NLDM) for the custom standard cell. This repo aims to introduce an approach of using open-source resources to do custom cell characterization.
 #### Under Development
-- [Semi-Automated Non Linear Delay Model Generator using NGSPICE](#semi-automated-non-linear-delay-model-generator-using-ngspice)
+- [Custom Standard Cell Design with a automated Non-Linear-Delay-Model Generator](#custom-standard-cell-design-with-a-automated-non-linear-delay-model-generator)
       - [Under Development](#under-development)
   - [What is Non Linear Delay Model(NLDM)?](#what-is-non-linear-delay-modelnldm)
-    - [Define Cell Rise, Cell Fall, Rise Transition and Fall Transition?](#define-cell-rise-cell-fall-rise-transition-and-fall-transition)
-  - [Proposed Flow for Timing Characterization](#proposed-flow-for-timing-characterization)
-  - [Explaining Flow using OR Gate example](#explaining-flow-using-or-gate-example)
-    - [NGSPICE File Setup](#ngspice-file-setup)
-    - [Process for Text File Creation](#process-for-text-file-creation)
-    - [Timing Block .lib Format Generation](#timing-block-lib-format-generation)
-      - [Run these command in terminal](#run-these-command-in-terminal)
-      - [Result:](#result)
-  - [Future Works:](#future-works)
+  - [Custom Standard Cell List and Pre-layout Results](#custom-standard-cell-list-and-pre-layout-results)
 
 ## What is Non Linear Delay Model(NLDM)?
 
@@ -22,8 +14,7 @@ delay, performance slew, or other timing checks. Most of the cell libraries used
 For different combinations of input at the cell input pin and multiple output capacitance at the cell output pin, the table provides the delay through the
 cell. In a two-dimensional array, where the two independent variables are the input transition and the capacitance of the output load and the entries in the table 
 are the delays.
-The characterization is performed using the ngspice open source circuit simulator.
-### Define Cell Rise, Cell Fall, Rise Transition and Fall Transition? 
+The characterization is performed using the ngspice open source circuit simulator.        
 ![](images/rise_fall_wave.jpg)
 
 The time taken by a signal to increase from 20 percent to 80 percent of its maximum value is known as transition delay or slew. This is referred to as "rise time".
@@ -42,50 +33,24 @@ Considering the rise/fall of both input and output, we are faced with four propa
   
 All the delays will have different values, or in some cases same values.
  
-## Proposed Flow for Timing Characterization
-Currently Simulation Setup is done manually for testing the NGSPICE scripts results.                                          
-![Characterization Flow](images/algo_cal_reduce.png)                                                      
-**Note: Focused on Combination Circuit Timing**
-## Explaining Flow using OR Gate example
-Start with simple schematic design using Xcircuit or any schematic capture tool and generate spice file subckt as shown below               
-![Spice File](images/spice_file.png)
-
-Once this file is created, we are ready to perform NGSPICE simulation.
-
-### NGSPICE File Setup
-This setup is divided into three sections:
-* **Adding Required Libraries and Sub-circuit:** '.include' commands are used for adding the subcircuit and skywater nfet and pfet libraries.
-* **Setting up Power Supplies and loads:** Power Supplies VDD and VSS as per the .lib file voltage requirement(1.8V). The Pulse supply type should be provided to the input pin which is considered related to the Output and other input pins need to be biased as they are not affecting the output. Assign a load capacitor(c1) as shown below:
-![Test Harness(File Name: or2.cir](images/test_harness.png)
-
-* **Control Commands:** These are the commands provided by ngspice to do sequence simulation with different sets of device parameter values and helps in post-simulation analysis. Commands shown below are for measuring the different timing figures:
-![Timing Measurement Commands(File Name: or2.cir](images/timing_measure.png)
-
-Also, `echo` command with `>>` used store these values in the 'text_files' folder: User uses these file for verification and generating .lib based timing block.
-
-### Process for Text File Creation
-Follow the Steps:
-  1. Make sure text_files folder is empty, otherwise delete the files using `rm` command.
-  2. `cd` to the root folder(in which sky130nm.lib exists) and type on the terminal       
-      `ngspice or2_custom/or2_0/or2.cir`
-  3. Check all the five files are generated into the text_files folder. This particular folder consisting of different timing .txt file is used by the python file for generating the .lib type timing block. 
-
-**Note: All terminal commands are run from the root directory of this repo**
-
-### Timing Block .lib Format Generation
-
-#### Run these command in terminal    
-```
-chmod 775 ./scripts/timing.py
-./scripts/timing.py -loc text_files/ -pin A
-```   
-Also, for help, type    
-`./scripts/timing.py -h`
-#### Result:                
-![Timing Block](images/result_timing.png)
-
-## Future Works:
-* Make the script more flexible for different combinational circuits.
-* Able to read .lib configuration file for extracting the ptc thresholds.
-* Find a way to make it a fully-automatic script that could run simulations and could be able to setup simulation environment.
+## Custom Standard Cell List and Pre-layout Results
+  1. [nand2_1x](custom_stdcell/nand2_1x/nand2.spice) |  [ Timing Lib File](custom_stdcell/nand2_1x/timing.lib)        
+  2. [nand2_2x](custom_stdcell/nand2_2x/nand2_2x.spice) |  [ Timing Lib File](custom_stdcell/nand2_2x/timing.lib)     
+      ![](custom_stdcell/nand2_2x/nand2_2x_out.png)     
+  3. [nand3_1x](custom_stdcell/nand3_1x/nand3_1x.spice) |  [ Timing Lib File](custom_stdcell/nand3_1x/timing.lib)     
+      ![](custom_stdcell/nand3_1x/nand3_1x_out.png)     
+  4. [nand3_2x](custom_stdcell/nand3_2x/nand3_2x.spice) |  [ Timing Lib File](custom_stdcell/nand3_2x/timing.lib)       
+      ![](custom_stdcell/nand3_2x/nand3_2x_out.png)   
+  5. [nand4_1x](custom_stdcell/nand4_1x/nand4_1x.spice) |  [ Timing Lib File](custom_stdcell/nand4_1x/timing.lib)     
+      ![](custom_stdcell/nand4_1x/nand4_1x_out.png)   
+  6. [nand4_2x](custom_stdcell/nand4_2x/nand4_2x.spice) |  [ Timing Lib File](custom_stdcell/nand4_2x/timing.lib)     
+      ![](custom_stdcell/nand4_2x/nand4_2x_out.png)       
+  7. [o21ai_1x](custom_stdcell/o21ai_1x/o21ai_1x.spice) |  [ Timing Lib File](custom_stdcell/o21ai_1x/timing.lib)     
+      ![](custom_stdcell/o21ai_1x/o21ai_1x_out.png)       
+  8. [o22ai_1x](custom_stdcell/o22ai_1x/o22ai_1x.spice)  |  [ Timing Lib File](custom_stdcell/o22ai_1x/timing.lib)      
+      ![](custom_stdcell/o22ai_1x/o22ai_1x_out.png)       
+  9.  [o221ai_1x](custom_stdcell/o221ai_1x/o221ai_1x.spice)  |  [ Timing Lib File](custom_stdcell/o221ai_1x/timing.lib)       
+      ![](custom_stdcell/o221ai_1x/o221ai_1x_out.png)       
+  10.  [o2111ai_1x](custo_stdcell/../custom_stdcell/o2111ai_1x/o2111ai_1x.spice)  |  [ Timing Lib File](custom_stdcell/o2111ai_1x/timing.lib)     
+      ![](custom_stdcell/o2111ai_1x/o2111ai_1x_out.png)     
 
