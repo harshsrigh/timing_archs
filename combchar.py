@@ -12,6 +12,7 @@ logic_operator = {'and':'&',
                   'not': '!'}
 
 def ng_postscript(meas_type, active_pin):
+    """ Generate ngspice control commands for timing_harness"""
     
     if meas_type == 'timing':
         
@@ -104,6 +105,8 @@ end"""
     return control_str, working_folder
 
 def voltage_deductions(in_pins, out_pins, logic_function, active_pin, netlist_pins):
+    """ Setup the Supply voltage and Logic Signal as per the logic function """
+
     in_pins = in_pins.replace(active_pin, '') + ' ' + active_pin
     
     pos_unate, pins_voltages = truths.Truths(in_pins.split(), [logic_function]).truth_table()
@@ -132,6 +135,9 @@ def voltage_deductions(in_pins, out_pins, logic_function, active_pin, netlist_pi
     return power_supplies, signal_supplies, pos_unate
 
 def read_spice():
+    """ Reads the .spice file specified in config.py 
+        Returns: Pins (str) 
+                 Spice Card Name  (str)"""
     
     with open(spice_file, "r") as file_object:
     # read file content
@@ -144,6 +150,7 @@ def read_spice():
     return pins, spice_card 
 
 def Simulation_env(netlist_pins, spice_card, active_pin):
+    """Creates timing_harness.cir file"""
     
     include_statements = f".include '{library_file}' \n.include '{spice_file}'"
     harness_file = path.join(cell_directory, "timing_harness.cir")
@@ -171,7 +178,7 @@ quit
     return harness_file, working_folder, pos_unate
 
 def ngspice_lunch(file_loc, working_folder):
-    """Launches NGspice and delete old simulation files"""
+    """Launches NGspice and delete old simulation files from the working_folder"""
     
     try:
         makedirs(working_folder)
@@ -198,7 +205,8 @@ def conv_logical(logic_func):
     return logic_func
 
 def timing_lib(card, timing_list):
-    
+    """ Generate .lib file """
+
     logic_func = conv_logical(logic_function)
     lib_file = path.join(cell_directory, 'timing.lib')
     timing_txt = '\n\t'.join(timing_list)    
