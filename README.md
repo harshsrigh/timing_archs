@@ -34,7 +34,7 @@ Considering the rise/fall of both input and output, we are faced with four propa
 All the delays will have different values, or in some cases same values.
  
 ## Custom Standard Cell List and Pre-layout Results
-  1. [nand2_1x](custom_stdcell/nand2_1x/nand2.spice) |  [ Timing Lib File](custom_stdcell/nand2_1x/timing.lib)
+  1. [nand2_1x](custom_stdcell/nand2_1x/nand2.spice) |  [ Timing Lib File](custom_stdcell/nand2_1x/timing.lib)          
       <img src="custom_stdcell/nand2_1x/nand2_1x_out.png" alt="nand2_1x" width="350"/>        
   2. [nand2_2x](custom_stdcell/nand2_2x/nand2_2x.spice) |  [ Timing Lib File](custom_stdcell/nand2_2x/timing.lib)     
       <img src="custom_stdcell/nand2_2x/nand2_2x_out.png" alt="nand2_2x" width="350"/>  
