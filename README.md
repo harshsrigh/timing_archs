@@ -90,6 +90,7 @@ All the delays will have different values, or in some cases same values.
     <img src="images/script_out.png" alt="script_out" width="350"/>
 ## Future Works: 
 **(Focused on Combination circuits only without tri-state/HiZ)**
+* Test .lib files using openSTA tool.
 * Perform Layout on these 10 cells.
 * Setup Power calculation harness for leakage power and internal power(total power - dynamic power)
 * Internal pin capacitance calculations
