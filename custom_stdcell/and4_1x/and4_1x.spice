@@ -1,0 +1,14 @@
+.subckt vsdcell_and4_1x A B C D VGND VPWR Y
+
+X5 net1 A net2 VGND sky130_fd_pr__nfet_01v8 w=0.42u l=0.15u 
+X0 net1 A VPWR VPWR sky130_fd_pr__pfet_01v8 w=0.42u l=0.15u 
+X1 net1 B VPWR VPWR sky130_fd_pr__pfet_01v8 w=0.42u l=0.15u 
+X2 net1 C VPWR VPWR sky130_fd_pr__pfet_01v8 w=0.42u l=0.15u 
+X3 net1 D VPWR VPWR sky130_fd_pr__pfet_01v8 w=0.42u l=0.15u 
+X4 Y net1 VPWR VPWR sky130_fd_pr__pfet_01v8 w=0.42u l=0.15u 
+X6 net2 B net3 VGND sky130_fd_pr__nfet_01v8 w=0.42u l=0.15u 
+X7 net3 C net4 VGND sky130_fd_pr__nfet_01v8 w=0.42u l=0.15u 
+X8 net4 D VGND VGND sky130_fd_pr__nfet_01v8 w=0.42u l=0.15u 
+X9 Y net1 VGND VGND sky130_fd_pr__nfet_01v8 w=0.42u l=0.15u 
+
+.ends
