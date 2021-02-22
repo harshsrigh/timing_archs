@@ -1,0 +1,18 @@
+* Function: not ((A1 and A2) or B1 or C1 or D1)
+
+.subckt vsdcell_a2111oi A1 A2 B1 C1 D1 VGND VPWR Y
+
+X0 net3 A1 VPWR VPWR sky130_fd_pr__pfet_01v8 w=0.42u l=0.15u 
+X1 net3 A2 VPWR VPWR sky130_fd_pr__pfet_01v8 w=0.42u l=0.15u
+X3 net4 B1 net3 VPWR sky130_fd_pr__pfet_01v8 w=0.42u l=0.15u 
+X6 Y A1 net1 VGND sky130_fd_pr__nfet_01v8 w=0.42u l=0.15u
+X7 net1 A2 VGND VGND sky130_fd_pr__nfet_01v8 w=0.42u l=0.15u 
+X8 Y B1 VGND VGND sky130_fd_pr__nfet_01v8 w=0.42u l=0.15u 
+X4 net12 C1 net4 VPWR sky130_fd_pr__pfet_01v8 w=0.42u l=0.15u
+X9 Y C1 VGND VGND sky130_fd_pr__nfet_01v8 w=0.42u l=0.15u
+X2 Y D1 net12 VPWR sky130_fd_pr__pfet_01v8 w=0.42u l=0.15u
+X5 Y D1 VGND VGND sky130_fd_pr__nfet_01v8 w=0.42u l=0.15u
+
+.ends
+
+
