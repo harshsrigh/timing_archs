@@ -1,4 +1,4 @@
-# Custom Standard Cell Design with a automated Non-Linear-Delay-Model Generator
+# Custom Standard Cell Design
 The flow uses control commands based on ngspice to construct the Non-Linear Delay Model(NLDM) for the custom standard cell. This repo aims to introduce an approach of using open-source resources to do custom cell characterization.
 #### Under Development
 - [Custom Standard Cell Design with a automated Non-Linear-Delay-Model Generator](#custom-standard-cell-design-with-a-automated-non-linear-delay-model-generator)
