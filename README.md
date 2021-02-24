@@ -1,7 +1,6 @@
 # Custom Standard Cell Design using Skywater 130nm PDK
 This repository provides a flow for doing custom standard cell design for Skywater 130nm PDK using open-source tools. The proposed flow uses NGSPICE for simulation, Magic for layout, and python scripts in conjunction with NGSPICE control commands to generate timing liberty files.
 <p align="center"><img src="images/custom_cell_design_flow.jpg" alt="Proposed flow" width="250" /></p>     
-
 #### Under Development
 - [Custom Standard Cell Design using Skywater 130nm PDK](#custom-standard-cell-design-using-skywater-130nm-pdk)
       - [Under Development](#under-development)
