@@ -37,6 +37,29 @@ Considering the rise/fall of both input and output, we are faced with four propa
   4. 50% of input fall to 50% of output fall.
   
 All the delays will have different values, or in some cases same values.
+Calculate the Fall time, Rise time, Fall Transition and Rise Transition.
+
+### Fall Time
+        Measuring Cell Fall Time @ 50% of VDD(1.8V) 
+        meas tran tinfall when v(A)=0.9 FALL=1 
+        meas tran tofall when v(X)=0.9 FALL=1
+        let cfall = (tofall-tinfall)/1e-9
+### Rise Time
+        Measuring Cell Rise Time @ 50% of VDD(1.8V) 
+        meas tran tinrise when v(in1)=0.9 RISE=1 
+        meas tran torise when v(out)=0.9 RISE=1
+        let crise = (torise-tinrise)/1e-9
+### Fall Transition        
+        Measuring Fall Transion Time @ 80-20% of VDD(1.8V) 
+        meas tran ft1 when v(out)=1.44 FALL=1 
+        meas tran ft2 when v(out)=0.36 FALL=1
+        let fall_tran = (ft2-ft1)/1e-9
+### Rise Transition        
+        Measuring Rise Transion Time @ 20-80% of VDD(1.8V) 
+        meas tran rt1 when v(out)=1.44 RISE=1 
+        meas tran rt2 when v(out)=0.36 RISE=1
+        let rise_tran = (rt1-rt2)/1e-9
+
  
 ## Custom Standard Cell List and Pre-layout Results
   1. [nand2_1x](custom_stdcell/nand2_1x/nand2.spice) |  [ Timing Lib File](custom_stdcell/nand2_1x/timing.lib)          
@@ -57,8 +80,35 @@ All the delays will have different values, or in some cases same values.
       <img src="custom_stdcell/o22ai_1x/o22ai_1x_out.png" alt="o22ai_1x_out" width="350"/>
   9.  [o221ai_1x](custom_stdcell/o221ai_1x/o221ai_1x.spice)  |  [ Timing Lib File](custom_stdcell/o221ai_1x/timing.lib)       
       <img src="custom_stdcell/o221ai_1x/o221ai_1x_out.png" alt="o221ai_1x_out" width="350"/>       
-  10.  [o2111ai_1x](custo_stdcell/../custom_stdcell/o2111ai_1x/o2111ai_1x.spice)  |  [ Timing Lib File](custom_stdcell/o2111ai_1x/timing.lib)     
-      <img src="custom_stdcell/o2111ai_1x/o2111ai_1x_out.png" alt="o2111ai_1x_out" width="350"/>      
+  10. [o2111ai_1x](custo_stdcell/../custom_stdcell/o2111ai_1x/o2111ai_1x.spice)  |  [ Timing Lib File](custom_stdcell/o2111ai_1x/timing.lib)     
+      <img src="custom_stdcell/o2111ai_1x/o2111ai_1x_out.png" alt="o2111ai_1x_out" width="350"/>   
+  11. [a2111oi_1x](custom_stdcell/a2111oi_1x/a2111oi_1x.spice)  |  [ Timing Lib File](custom_stdcell/a2111oi_1x/timing.lib)     
+      <img src="custom_stdcell/a2111oi_1x/a2111oi_1x_sim.PNG" alt="a2111oi_1x_out" width="350"/>    
+  12. [a311oi_1x](custom_stdcell/a311oi_1x/a311oi_1x.spice)  |  [ Timing Lib File](custom_stdcell/a311oi_1x/timing.lib)     
+      <img src="custom_stdcell/a311oi_1x/a311oi_1x_sim.PNG" alt="a311oi_1x_out" width="350"/>
+  13. [a31oi_1x](custom_stdcell/a31oi_1x/a31oi_1x.spice)  |  [ Timing Lib File](custom_stdcell/a31oi_1x/timing.lib)     
+      <img src="custom_stdcell/a31oi_1x/a31oi_1x_sim.PNG" alt="a31oi_1x_out" width="350"/>
+  14. [a32oi_1x](custom_stdcell/a32oi_1x/a32oi_1x.spice)  |  [ Timing Lib File](custom_stdcell/a32oi_1x/timing.lib)     
+      <img src="custom_stdcell/a32oi_1x/a32oi_1x_sim.PNG" alt="a32oi_1x_out" width="350"/>
+  15. [and2_1x](custom_stdcell/and2_1x/and2_1x.spice)  |  [ Timing Lib File](custom_stdcell/and2_1x/timing.lib)     
+      <img src="custom_stdcell/and2_1x/and2_1x_sim.PNG" alt="and2_1x_out" width="350"/>
+  16. [and2_2x](custom_stdcell/and2_2x/and2_2x.spice)  |  [ Timing Lib File](custom_stdcell/and2_2x/timing.lib)     
+      <img src="custom_stdcell/and2_2x/and2_2x_sim.PNG" alt="and2_2x_out" width="350"/>
+  17. [and3_1x](custom_stdcell/and3_1x/and3_1x.spice)  |  [ Timing Lib File](custom_stdcell/and3_1x/timing.lib)     
+      <img src="custom_stdcell/and3_1x/and3_1x_sim.PNG" alt="and3_1x_out" width="350"/>
+  18. [and3_2x](custom_stdcell/and3_2x/and3_2x.spice)  |  [ Timing Lib File](custom_stdcell/and3_2x/timing.lib)     
+      <img src="custom_stdcell/and3_2x/and3_2x_sim.PNG" alt="and3_2x_out" width="350"/>
+  19. [and4_1x](custom_stdcell/and4_1x/and4_1x.spice)  |  [ Timing Lib File](custom_stdcell/and4_1x/timing.lib)     
+      <img src="custom_stdcell/and4_1x/and4_1x_sim.PNG" alt="and4_1x_out" width="350"/>
+  20. [and4_2x](custom_stdcell/and4_2x/and4_2x.spice)  |  [ Timing Lib File](custom_stdcell/and4_2x/timing.lib)     
+      <img src="custom_stdcell/and4_2x/and4_2x_sim.PNG" alt="and4_2x_out" width="350"/>
+      
+## Schematic and spice file generation using Xschem
+   * Software Requirement: Xschem 
+   * Use this command to install Xschem `sudo apt install xschem` 
+   * Design the circuit with the help of pmos and nmos from the library models and change the W and L values according to specification.
+   * Generate spice file with the help of netlist button.(You can choose the type of netlist from 1.spice 2.VHDL 3.Verilog).
+
 
 ## Instruction to generate Timing liberty file
 **Step 0: Perquisites based on Ubuntu OS**      
