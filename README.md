@@ -102,8 +102,8 @@ All the delays will have different values, or in some cases same values.
     <img src="images/script_out.png" alt="script_out" width="350"/>
 
 ## Verification of generated liberty file with OpenSTA
-* Perquisites openSTA software. You could install using `sudo apt-get install openSTA'
-* change directory to sta_results: `$ cd sta_results`
+* Perquisites openSTA software. You could install using `sudo apt-get install openSTA`
+* Change directory to sta_results: `$ cd sta_results`
 * Copy the generated cell group of your standard cell to `sky130_fd_sc_hd__tt_025C_1v80.lib` as done for `vsdcell_nand3_2x`
 * Edit the sta.conf and my_base.sdc as per your requirement.
 * Run OpenSTA using command: `$ sta sta.conf`.
