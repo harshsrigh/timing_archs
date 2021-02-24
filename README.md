@@ -73,10 +73,11 @@ All the delays will have different values, or in some cases same values.
    * Mention Input and Output pins.
    * Enter Logic function.
 
-    **Nand3_2x example:**  [nand4_2x config.py](config.py)      
+**Nand3_2x example:**  [nand4_2x config.py](config.py)      
     File Configuration:             
-    * Replace 'custom_stdcell/nand3_2x/' directory with your cell working directory in config.py file.
-    * Similarly replace spice file name 'nand3_2x.spice' with your spice file name. Make sure the spice format has the subckt inside it with proper scaling factor.     
+  * Replace 'custom_stdcell/nand3_2x/' directory with your cell working directory in config.py file.
+  * Similarly replace spice file name 'nand3_2x.spice' with your spice file name. Make sure the spice format has the subckt inside it with proper scaling factor.     
+    
     ``` py
     library_directory = ''
     library_file = path.join(library_directory, 'sky130nm.lib')
@@ -84,8 +85,9 @@ All the delays will have different values, or in some cases same values.
     spice_file = path.join(cell_directory, "nand3_2x.spice") # Enter .spice file
     output_folder =  path.join(cell_directory, "data")
     ```             
-    Input Vector:
-    ``` py
+Input Vector:    
+   
+    ```py
     input_delay = '0.01n 0.023n 0.0531329n 0.122474n 0.282311n 0.650743n 1.5n' # Only put the unit(do not include sec suffix)
     output_caps = '0.0005p 0.0012105800p 0.002931p 0.00709641p 0.0171815p 0.0415991p 0.100718p' # Only put the unit(do not include Farad suffix)
     input_pins = 'A B C' # TODO: extract from .lef files
