@@ -1,7 +1,9 @@
-# Custom Standard Cell Design with a automated Non-Linear-Delay-Model Generator
-The flow uses control commands based on ngspice to construct the Non-Linear Delay Model(NLDM) for the custom standard cell. This repo aims to introduce an approach of using open-source resources to do custom cell characterization.
+# Custom Standard Cell Design using Skywater 130nm PDK
+This repository provides a flow for doing custom standard cell design for Skywater 130nm PDK using open-source tools. The proposed flow uses NGSPICE for simulation, Magic for layout, and python scripts in conjunction with NGSPICE control commands to generate timing liberty files.
+<p align="center"><img src="images/custom_cell_design_flow.jpg" alt="Proposed flow" width="230" /></p>     
+
 #### Under Development
-- [Custom Standard Cell Design with a automated Non-Linear-Delay-Model Generator](#custom-standard-cell-design-with-a-automated-non-linear-delay-model-generator)
+- [Custom Standard Cell Design using Skywater 130nm PDK](#custom-standard-cell-design-using-skywater-130nm-pdk)
       - [Under Development](#under-development)
   - [What is Non Linear Delay Model(NLDM)?](#what-is-non-linear-delay-modelnldm)
   - [Custom Standard Cell List and Pre-layout Results](#custom-standard-cell-list-and-pre-layout-results)
