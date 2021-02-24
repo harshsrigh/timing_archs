@@ -1,11 +1,13 @@
-# Custom Standard Cell Design
-The flow uses control commands based on ngspice to construct the Non-Linear Delay Model(NLDM) for the custom standard cell. This repo aims to introduce an approach of using open-source resources to do custom cell characterization.
+# Custom Standard Cell Design using Skywater 130nm PDK
+This repository provides a flow for doing custom standard cell design for Skywater 130nm PDK using open-source tools. The proposed flow uses NGSPICE for simulation, Magic for layout, and python scripts in conjunction with NGSPICE control commands to generate timing liberty files.
+<p align="center"><img src="images/custom_cell_design_flow.jpg" alt="Proposed flow" width="250" /></p>     
 #### Under Development
-- [Custom Standard Cell Design with a automated Non-Linear-Delay-Model Generator](#custom-standard-cell-design-with-a-automated-non-linear-delay-model-generator)
+- [Custom Standard Cell Design using Skywater 130nm PDK](#custom-standard-cell-design-using-skywater-130nm-pdk)
       - [Under Development](#under-development)
   - [What is Non Linear Delay Model(NLDM)?](#what-is-non-linear-delay-modelnldm)
   - [Custom Standard Cell List and Pre-layout Results](#custom-standard-cell-list-and-pre-layout-results)
   - [Instruction to generate Timing liberty file](#instruction-to-generate-timing-liberty-file)
+  - [Verification of generated liberty file with OpenSTA](#verification-of-generated-liberty-file-with-opensta)
   - [Future Works:](#future-works)
 
 ## What is Non Linear Delay Model(NLDM)?
@@ -58,36 +60,54 @@ All the delays will have different values, or in some cases same values.
       <img src="custom_stdcell/o2111ai_1x/o2111ai_1x_out.png" alt="o2111ai_1x_out" width="350"/>      
 
 ## Instruction to generate Timing liberty file
+**Step 0: Perquisites based on Ubuntu OS**      
+  * Software Requirements: NGSPICE and python 3     
+  * Clone the repository: `git clone https://github.com/harshsrigh/timing_archs.git`        
+  * Change Directory to timing_arch: `cd timing_arch`
+  * All the commands need to be run from the root directory i.e `user_name@PC_name:~/timing_archs$`
 
-1. **Edit config.py**
-   1. Enter custom cell folder and spice file that needs to be characterized.
-   2. Mention input vectors for input delay and load capacitor.
-   3. Mention Input and Output pins.
-   4. Enter Logic function.
+**Step 1: Edit config.py**
+   * Enter custom cell folder and spice file that needs to be characterized.
+   * Mention input vectors for input delay and load capacitor.
+   * Mention Input and Output pins.
+   * Enter Logic function.
 
-    **Nand4_2x example:**  [nand4_2x config.py](config.py)      
-    File Configuration:     
+**Nand3_2x example:**  [nand4_2x config.py](config.py)      
+    File Configuration:             
+  * Replace 'custom_stdcell/nand3_2x/' directory with your cell working directory in config.py file.
+  * Similarly replace spice file name 'nand3_2x.spice' with your spice file name. Make sure the spice format has the subckt inside it with proper scaling factor.     
+    
     ``` py
     library_directory = ''
     library_file = path.join(library_directory, 'sky130nm.lib')
-    cell_directory = 'custom_stdcell/nand4_2x/' # Enter cell folder
-    spice_file = path.join(cell_directory, "nand4_2x.spice") # Enter .spice file
+    cell_directory = 'custom_stdcell/nand3_2x/' # Enter cell folder
+    spice_file = path.join(cell_directory, "nand3_2x.spice") # Enter .spice file
     output_folder =  path.join(cell_directory, "data")
     ```             
-    Input Vector:
-    ``` py
+Input Vector:    
+   
+    ```py
     input_delay = '0.01n 0.023n 0.0531329n 0.122474n 0.282311n 0.650743n 1.5n' # Only put the unit(do not include sec suffix)
     output_caps = '0.0005p 0.0012105800p 0.002931p 0.00709641p 0.0171815p 0.0415991p 0.100718p' # Only put the unit(do not include Farad suffix)
-    input_pins = 'A B C D' # TODO: extract from .lef files
+    input_pins = 'A B C' # TODO: extract from .lef files
     output_pins = 'Y' # TODO: extract from .lef files
-    logic_function = 'not (A and B and C and D)' # Use keyword 'not', 'and' , 'or'
+    logic_function = 'not (A and B and C)' # Use keyword 'not', 'and' , 'or'
     ```         
 
-2. **Execute python file**       
+**Step 3: Execute python file**       
     Enter command into terminal: `python3 combchar.py`
 
-3. **Ideal Run Final Output**:                             
+**Step 4: Ideal Run Final Output**:                             
     <img src="images/script_out.png" alt="script_out" width="350"/>
+
+## Verification of generated liberty file with OpenSTA
+* Perquisites openSTA software. You could install using `sudo apt-get install openSTA'
+* change directory to sta_results: `cd sta_results`
+* Copy the generated cell group of your standard cell to 'sky130_fd_sc_hd__tt_025C_1v80.lib' as done for 'vsdcell_nand3_2x'
+* Edit the sta.conf and my_base.sdc as per your requirement.
+* Run OpenSTA using command: `sta sta.conf`.
+* Verify your cell of interest and make sure there is no warning due the liberty files.       
+    <img src="images/sta_nand3.png" alt="sta_nand3_2x" width="350"/>
 ## Future Works: 
 **(Focused on Combination circuits only without tri-state/HiZ)**
 * Test .lib files using openSTA tool.
