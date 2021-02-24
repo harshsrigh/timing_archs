@@ -166,7 +166,7 @@ def gen_lib(in_rises, out_caps, timing_table, attr_name):
     out_caps_str = ', '.join(out_caps)
     tables_data = ['"{}"'.format(', '.join(timing_table[num]))
                    for num in range(len(timing_table))]
-    timing_str = ', \ \n \t\t\t'.join(tables_data)
+    timing_str = ', \\\n \t\t\t'.join(tables_data)
 
     timing_cell = f"""{attr_name} ("del_1_{in_size}_{out_size}") {{
                     index_1("{in_rises_str}");
@@ -175,21 +175,62 @@ def gen_lib(in_rises, out_caps, timing_table, attr_name):
                 }}"""
     return timing_cell
 
+def input_pins(file_path, active_pin, max_tran):
+    """Sets up the input pins information for the cell group """
+    max_tran_format = liberty_float(max_tran)
+    file_path_loc = path.join(file_path, 'input_pins_caps.txt')
+    with open(file_path_loc, 'r') as fop:
+        data = fop.read()
+    
+    for row in data.split('\n'):
+        row_sp = row.split(':')
+        if len(row_sp) == 3:
+            active_pin = row_sp[0]
+            if 'fall' in row:
+                fall_cap = row_sp[-1]
+            elif 'rise' in row:
+                rise_cap = row_sp[-1]
+    
+    try:
+        avg_cap = (float(fall_cap)+float(rise_cap))/2
+        avg_cap_format = liberty_float(avg_cap)
+        fall_cap_format = liberty_float(fall_cap)
+        rise_cap_format = liberty_float(rise_cap)
+    except:
+        avg_cap = 'Manual'
+        avg_cap_format =  'Manual'
+        fall_cap_format = 'Manual'
+        rise_cap_format = 'Manual'
+
+    pin_internal = \
+        f"""pin ("{active_pin}") {{
+            capacitance : {avg_cap_format};
+            clock : "false";
+            direction : "input";
+            fall_capacitance : {fall_cap_format};
+            max_transition : {max_tran_format};
+            related_ground_pin : "VGND";
+            related_power_pin : "VPWR";
+            rise_capacitance : {rise_cap_format};
+        }}"""
+    
+    return pin_internal
+
 
 if __name__ == '__main__':
-    file_location = '../timing_archs/text_files'
+    file_location = '/home/hshukla3/timing_archs/custom_stdcell/or2_0/data/input_caps/input_pins_caps.txt'
+    input_pins(file_location, 'A', '1.5')
+    # parser = argparse.ArgumentParser(
+    #     description="Generates Timing Block using NGSPICE generated .txt files")
     
-    parser = argparse.ArgumentParser(
-        description="Generates Timing Block using NGSPICE generated .txt files")
+    # parser.add_argument('-loc', metavar='Location', help='Enter the location of all .txt files', 
+    #                     type=str, required=True, default=file_location)
     
-    parser.add_argument('-loc', metavar='Location', help='Enter the location of all .txt files', 
-                        type=str, required=True, default=file_location)
-    
-    parser.add_argument('-pin', metavar='Relatable Pin', help='Enter the related pin Name', type=str, 
-                        required= False, default='A')
+    # parser.add_argument('-pin', metavar='Relatable Pin', help='Enter the related pin Name', type=str, 
+    #                     required= False, default='A')
 
     
-    argus = parser.parse_args()
-    unate = 'undefined'
-    timing_info = timing_generator(argus.loc, unate, related_pin=argus.pin)
-    print(timing_info)
+    # argus = parser.parse_args()
+    # unate = 'undefined'
+    # timing_info = timing_generator(argus.loc, unate, related_pin=argus.pin)
+    # print(timing_info)
