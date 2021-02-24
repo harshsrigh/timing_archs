@@ -63,8 +63,8 @@ All the delays will have different values, or in some cases same values.
 ## Instruction to generate Timing liberty file
 **Step 0: Perquisites based on Ubuntu OS**      
   * Software Requirements: NGSPICE and python 3     
-  * Clone the repository: `git clone https://github.com/harshsrigh/timing_archs.git`        
-  * Change Directory to timing_arch: `cd timing_arch`
+  * Clone the repository: `$ git clone https://github.com/harshsrigh/timing_archs.git`        
+  * Change Directory to timing_arch: `$ cd timing_arch`
   * All the commands need to be run from the root directory i.e `user_name@PC_name:~/timing_archs$`
 
 **Step 1: Edit config.py**
@@ -73,7 +73,7 @@ All the delays will have different values, or in some cases same values.
    * Mention Input and Output pins.
    * Enter Logic function.
 
-**Nand3_2x example:**  [nand4_2x config.py](config.py)      
+**Nand3_2x example:**  [nand3_2x config.py](config.py)      
                  
   * Replace 'custom_stdcell/nand3_2x/' directory with your cell working directory in config.py file.
   * Similarly replace spice file name 'nand3_2x.spice' with your spice file name. Make sure the spice format has the subckt inside it with proper scaling factor.     
@@ -95,18 +95,18 @@ All the delays will have different values, or in some cases same values.
     logic_function = 'not (A and B and C)' # Use keyword 'not', 'and' 'or'
     ```         
 
-**Step 3: Execute python file**       
-    Enter command into terminal: `python3 combchar.py`
+**Step 2: Execute python file**       
+    Enter command into terminal: `$ python3 combchar.py`
 
-**Step 4: Ideal Run Final Output**:                             
+**Step 3: Ideal Run Final Output**:                             
     <img src="images/script_out.png" alt="script_out" width="350"/>
 
 ## Verification of generated liberty file with OpenSTA
 * Perquisites openSTA software. You could install using `sudo apt-get install openSTA'
-* change directory to sta_results: `cd sta_results`
-* Copy the generated cell group of your standard cell to 'sky130_fd_sc_hd__tt_025C_1v80.lib' as done for 'vsdcell_nand3_2x'
+* change directory to sta_results: `$ cd sta_results`
+* Copy the generated cell group of your standard cell to `sky130_fd_sc_hd__tt_025C_1v80.lib` as done for `vsdcell_nand3_2x`
 * Edit the sta.conf and my_base.sdc as per your requirement.
-* Run OpenSTA using command: `sta sta.conf`.
+* Run OpenSTA using command: `$ sta sta.conf`.
 * Verify your cell of interest and make sure there is no warning due the liberty files.       
     <img src="images/sta_nand3.png" alt="sta_nand3_2x" width="350"/>
 ## Future Works: 
