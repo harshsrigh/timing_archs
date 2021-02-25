@@ -6,7 +6,12 @@ This repository provides a flow for doing custom standard cell design for Skywat
 - [Custom Standard Cell Design using Skywater 130nm PDK](#custom-standard-cell-design-using-skywater-130nm-pdk)
       - [Under Development](#under-development)
   - [What is Non Linear Delay Model(NLDM)?](#what-is-non-linear-delay-modelnldm)
+    - [Fall Time](#fall-time)
+    - [Rise Time](#rise-time)
+    - [Fall Transition](#fall-transition)
+    - [Rise Transition](#rise-transition)
   - [Custom Standard Cell List and Pre-layout Results](#custom-standard-cell-list-and-pre-layout-results)
+  - [Schematic and spice file generation using Xschem](#schematic-and-spice-file-generation-using-xschem)
   - [Instruction to generate Timing liberty file](#instruction-to-generate-timing-liberty-file)
   - [Verification of generated liberty file with OpenSTA](#verification-of-generated-liberty-file-with-opensta)
   - [Future Works:](#future-works)
@@ -158,7 +163,7 @@ Calculate the Fall time, Rise time, Fall Transition and Rise Transition.
 * Edit the sta.conf and my_base.sdc as per your requirement.
 * Run OpenSTA using command: `$ sta sta.conf`.
 * Verify your cell of interest and make sure there is no warning due the liberty files.       
-    <img src="images/sta_nand3.png" alt="sta_nand3_2x" width="350"/>
+    <img src="images/sta_nand3.png" alt="sta_nand3_2x" width="450"/>
 ## Future Works: 
 **(Focused on Combination circuits only without tri-state/HiZ)**
 * Test .lib files using openSTA tool.
