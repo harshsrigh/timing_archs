@@ -11,8 +11,8 @@ This repository provides a flow for doing custom standard cell design for Skywat
     - [Fall Transition](#fall-transition)
     - [Rise Transition](#rise-transition)
   - [Custom Standard Cell List and Pre-layout Results](#custom-standard-cell-list-and-pre-layout-results)
-  - [Schematic and spice file generation using Xschem](#schematic-and-spice-file-generation-using-xschem)
-  - [Instruction to generate Timing liberty file](#instruction-to-generate-timing-liberty-file)
+  - [Schematic and spice file generation using Xschem (Optional)](#schematic-and-spice-file-generation-using-xschem-optional)
+  - [Instruction to Generate Timing Liberty file](#instruction-to-generate-timing-liberty-file)
   - [Verification of generated liberty file with OpenSTA](#verification-of-generated-liberty-file-with-opensta)
   - [Future Works:](#future-works)
 
@@ -66,58 +66,21 @@ Calculate the Fall time, Rise time, Fall Transition and Rise Transition.
         let rise_tran = (rt1-rt2)/1e-9
 
  
-## Custom Standard Cell List and Pre-layout Results
-  1. [nand2_1x](custom_stdcell/nand2_1x/nand2.spice) |  [ Timing Lib File](custom_stdcell/nand2_1x/timing.lib)          
-      <img src="custom_stdcell/nand2_1x/nand2_1x_out.png" alt="nand2_1x" width="350"/>        
-  2. [nand2_2x](custom_stdcell/nand2_2x/nand2_2x.spice) |  [ Timing Lib File](custom_stdcell/nand2_2x/timing.lib)     
-      <img src="custom_stdcell/nand2_2x/nand2_2x_out.png" alt="nand2_2x" width="350"/>  
-  3. [nand3_1x](custom_stdcell/nand3_1x/nand3_1x.spice) |  [ Timing Lib File](custom_stdcell/nand3_1x/timing.lib)             
-      <img src="custom_stdcell/nand3_1x/nand3_1x_out.png" alt="nand3_1x" width="350"/>      
-  4. [nand3_2x](custom_stdcell/nand3_2x/nand3_2x.spice) |  [ Timing Lib File](custom_stdcell/nand3_2x/timing.lib)       
+## Custom Standard Cell List and Pre-layout Results     
+   [nand3_2x](custom_stdcell/nand3_2x/nand3_2x.spice) |  [ Timing Lib File](custom_stdcell/nand3_2x/timing.lib)       
       <img src="custom_stdcell/nand3_2x/nand3_2x_out.png" alt="nand3_2x" width="350"/>   
-  5. [nand4_1x](custom_stdcell/nand4_1x/nand4_1x.spice) |  [ Timing Lib File](custom_stdcell/nand4_1x/timing.lib)     
-      <img src="custom_stdcell/nand4_1x/nand4_1x_out.png" alt="nand4_1x" width="350"/>   
-  6. [nand4_2x](custom_stdcell/nand4_2x/nand4_2x.spice) |  [ Timing Lib File](custom_stdcell/nand4_2x/timing.lib)     
-      <img src="custom_stdcell/nand4_2x/nand4_2x_out.png" alt="nand4_2x" width="350"/>      
-  7. [o21ai_1x](custom_stdcell/o21ai_1x/o21ai_1x.spice) |  [ Timing Lib File](custom_stdcell/o21ai_1x/timing.lib)     
-      <img src="custom_stdcell/o21ai_1x/o21ai_1x_out.png" alt="o21ai_1x" width="350"/>
-  8. [o22ai_1x](custom_stdcell/o22ai_1x/o22ai_1x.spice)  |  [ Timing Lib File](custom_stdcell/o22ai_1x/timing.lib)      
-      <img src="custom_stdcell/o22ai_1x/o22ai_1x_out.png" alt="o22ai_1x_out" width="350"/>
-  9.  [o221ai_1x](custom_stdcell/o221ai_1x/o221ai_1x.spice)  |  [ Timing Lib File](custom_stdcell/o221ai_1x/timing.lib)       
-      <img src="custom_stdcell/o221ai_1x/o221ai_1x_out.png" alt="o221ai_1x_out" width="350"/>       
-  10. [o2111ai_1x](custo_stdcell/../custom_stdcell/o2111ai_1x/o2111ai_1x.spice)  |  [ Timing Lib File](custom_stdcell/o2111ai_1x/timing.lib)     
-      <img src="custom_stdcell/o2111ai_1x/o2111ai_1x_out.png" alt="o2111ai_1x_out" width="350"/>   
-  11. [a2111oi_1x](custom_stdcell/a2111oi_1x/a2111oi_1x.spice)  |  [ Timing Lib File](custom_stdcell/a2111oi_1x/timing.lib)     
-      <img src="custom_stdcell/a2111oi_1x/a2111oi_1x_sim.PNG" alt="a2111oi_1x_out" width="350"/>    
-  12. [a311oi_1x](custom_stdcell/a311oi_1x/a311oi_1x.spice)  |  [ Timing Lib File](custom_stdcell/a311oi_1x/timing.lib)     
-      <img src="custom_stdcell/a311oi_1x/a311oi_1x_sim.PNG" alt="a311oi_1x_out" width="350"/>
-  13. [a31oi_1x](custom_stdcell/a31oi_1x/a31oi_1x.spice)  |  [ Timing Lib File](custom_stdcell/a31oi_1x/timing.lib)     
-      <img src="custom_stdcell/a31oi_1x/a31oi_1x_sim.PNG" alt="a31oi_1x_out" width="350"/>
-  14. [a32oi_1x](custom_stdcell/a32oi_1x/a32oi_1x.spice)  |  [ Timing Lib File](custom_stdcell/a32oi_1x/timing.lib)     
-      <img src="custom_stdcell/a32oi_1x/a32oi_1x_sim.PNG" alt="a32oi_1x_out" width="350"/>
-  15. [and2_1x](custom_stdcell/and2_1x/and2_1x.spice)  |  [ Timing Lib File](custom_stdcell/and2_1x/timing.lib)     
-      <img src="custom_stdcell/and2_1x/and2_1x_sim.PNG" alt="and2_1x_out" width="350"/>
-  16. [and2_2x](custom_stdcell/and2_2x/and2_2x.spice)  |  [ Timing Lib File](custom_stdcell/and2_2x/timing.lib)     
-      <img src="custom_stdcell/and2_2x/and2_2x_sim.PNG" alt="and2_2x_out" width="350"/>
-  17. [and3_1x](custom_stdcell/and3_1x/and3_1x.spice)  |  [ Timing Lib File](custom_stdcell/and3_1x/timing.lib)     
-      <img src="custom_stdcell/and3_1x/and3_1x_sim.PNG" alt="and3_1x_out" width="350"/>
-  18. [and3_2x](custom_stdcell/and3_2x/and3_2x.spice)  |  [ Timing Lib File](custom_stdcell/and3_2x/timing.lib)     
-      <img src="custom_stdcell/and3_2x/and3_2x_sim.PNG" alt="and3_2x_out" width="350"/>
-  19. [and4_1x](custom_stdcell/and4_1x/and4_1x.spice)  |  [ Timing Lib File](custom_stdcell/and4_1x/timing.lib)     
-      <img src="custom_stdcell/and4_1x/and4_1x_sim.PNG" alt="and4_1x_out" width="350"/>
-  20. [and4_2x](custom_stdcell/and4_2x/and4_2x.spice)  |  [ Timing Lib File](custom_stdcell/and4_2x/timing.lib)     
-      <img src="custom_stdcell/and4_2x/and4_2x_sim.PNG" alt="and4_2x_out" width="350"/>
       
-## Schematic and spice file generation using Xschem
+## Schematic and spice file generation using Xschem (Optional)
    * Software Requirement: Xschem 
    * Use this command to install Xschem `sudo apt install xschem` 
    * Design the circuit with the help of pmos and nmos from the library models and change the W and L values according to specification.
    * Generate spice file with the help of netlist button.(You can choose the type of netlist from 1.spice 2.VHDL 3.Verilog).
 
 
-## Instruction to generate Timing liberty file
+## Instruction to Generate Timing Liberty file
 **Step 0: Perquisites based on Ubuntu OS**      
-  * Software Requirements: NGSPICE and python 3     
+  * Software Requirements: NGSPICE and python 3   
+  * Numpy module download: `pip3 install numpy`   
   * Clone the repository: `$ git clone https://github.com/harshsrigh/timing_archs.git`        
   * Change Directory to timing_arch: `$ cd timing_arch`
   * All the commands need to be run from the root directory i.e `user_name@PC_name:~/timing_archs$`
@@ -143,7 +106,7 @@ Calculate the Fall time, Rise time, Fall Transition and Rise Transition.
     ```             
     Input Vector:
     ``` py
-    input_delay = '0.01n 0.023n 0.0531329n 0.122474n 0.282311n 0.650743 1.5n' # Only put the unit(do not include sec suffix)
+    input_slew = '0.01n 0.023n 0.0531329n 0.122474n 0.282311n 0.650743 1.5n' # Only put the unit(do not include sec suffix)
     output_caps = '0.0005p 0.0012105800p 0.002931p 0.00709641p 0.0171815 0.0415991p 0.100718p' # Only put the unit(do not include Farad suffix)
     input_pins = 'A B C' # TODO: extract from .lef files
     output_pins = 'Y' # TODO: extract from .lef files
