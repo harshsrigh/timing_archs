@@ -1,0 +1,2 @@
+C:rise_capacitance:0.00214704
+C:fall_capacitance:0.00210767

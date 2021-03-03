@@ -21,7 +21,7 @@ def ng_postscript(meas_type, active_pin):
         control_str = \
                         f"""
                                 let run  = 0
-                                foreach in_delay {input_delay}
+                                foreach in_delay {input_slew}
 
                             * Initiating Text Files in folder data
                             echo "input_delay:$in_delay" >> {working_folder}/input_delay.txt
