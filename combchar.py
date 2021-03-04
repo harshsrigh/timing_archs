@@ -235,7 +235,7 @@ def timing_lib(card, timing_list, inpin_list):
     lib_file = path.join(cell_directory, 'timing.lib')
     timing_txt = '\n\t'.join(timing_list)
     input_pin_txt = '\n\t'.join(inpin_list)    
-    cell_card = f"""cell("{card}"){{
+    cell_card = f"""cell ("{card}") {{
         {input_pin_txt}
         pin ("{output_pins}") {{
         direction: "output";
