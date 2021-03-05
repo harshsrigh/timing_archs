@@ -68,7 +68,7 @@ Calculate the Fall time, Rise time, Fall Transition and Rise Transition.
  
 ## Custom Standard Cell List and Results     
    [Pre-layout nand2_1x ](custom_stdcell/nand2_1x/nand2_1x.spice) | [Post-layout nand2_1x ](custom_stdcell/nand2_1x/vsdcell_nand2_1x.spice) | [ Timing Lib File](custom_stdcell/nand2_1x/timing.lib) | [Modified Liberty File](sta_results/sky_mod.lib)         
-      <img src="custom_stdcell/nand2_1x/nand2_1x_out.png" alt="nand2_1x" width="350"/>
+      <img src="custom_stdcell/nand2_1x/nand2_1x_out.png" alt="nand2_1x" width="500"/>
       <img src="custom_stdcell/nand2_1x/nand2_1x_layout.png" alt="nand2_1x_layout" width="250"/>    
       
 ## Schematic and spice file generation using Xschem (Optional)
