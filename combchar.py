@@ -6,6 +6,7 @@ import os, re
 import scripts.truths as truths
 import scripts.timing as timing
 import subprocess
+import scripts.merge as merge
 
 logic_operator = {'and':'&',
                   'or': '|',
@@ -21,7 +22,7 @@ def ng_postscript(meas_type, active_pin):
         control_str = \
                         f"""
                                 let run  = 0
-                                foreach in_delay {input_slew}
+                                foreach in_delay {input_transition_time}
 
                             * Initiating Text Files in folder data
                             echo "input_delay:$in_delay" >> {working_folder}/input_delay.txt
@@ -232,7 +233,7 @@ def timing_lib(card, timing_list, inpin_list):
     """ Generate .lib file """
 
     logic_func = conv_logical(logic_function)
-    lib_file = path.join(cell_directory, 'timing.lib')
+    cell_lib_file = path.join(cell_directory, 'timing.lib')
     timing_txt = '\n\t'.join(timing_list)
     input_pin_txt = '\n\t'.join(inpin_list)    
     cell_card = f"""cell ("{card}") {{
@@ -247,10 +248,17 @@ def timing_lib(card, timing_list, inpin_list):
         }}
     }}    
     """
-    with open(lib_file, "w") as file_doc:
+    with open(cell_lib_file, "w") as file_doc:
         file_doc.write(cell_card)
 
-    print(f'Check:  {lib_file}')
+    print(f'Check:  {cell_lib_file}')
+    # To Merge File with the Base file
+    merge_obj = merge.MergeLib(base_file=lib_file, cells_file=cell_lib_file, output_file=merged_file_file)
+    status = merge_obj.add_cells()
+    if status:
+        print(f'Updated Liberty File: {merged_file_file}')
+    else:
+        print(f'Manually add the timing lib using {cell_lib_file}')
 
 if __name__ == '__main__':
     pins, card = read_spice()
