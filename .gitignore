@@ -2,6 +2,7 @@
 *.data
 *.plt
 *.out
+*.txt
 *__pycache__
 test_harness.cir
 power_harness.cir
