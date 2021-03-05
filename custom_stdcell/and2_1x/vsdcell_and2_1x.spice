@@ -1,0 +1,18 @@
+* SPICE3 file created from vsdcell_and2_1x.ext - technology: sky130A
+
+.option scale=10000u
+
+.subckt vsdcell_and2_1x A B VGND VPWR Y
+M1000 a_72_143# B a_72_41# VGND nshort w=42 l=23
++  ad=1512 pd=156 as=3654 ps=258
+M1001 Y a_72_143# VGND VGND nshort w=38 l=21
++  ad=2014 pd=182 as=3348 ps=328
+M1002 VPWR B a_72_143# VPWR pshort w=91 l=23
++  ad=9106 pd=700 as=7917 ps=356
+M1003 a_72_143# A VPWR VPWR pshort w=91 l=23
++  ad=0 pd=0 as=0 ps=0
+M1004 Y a_72_143# VPWR VPWR pshort w=43 l=21
++  ad=2279 pd=192 as=0 ps=0
+M1005 a_72_41# A VGND VGND nshort w=42 l=23
++  ad=0 pd=0 as=0 ps=0
+.ends
