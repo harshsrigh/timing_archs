@@ -1,9 +1,9 @@
 Test Harness for verifying nand2.spice
 
 .include '../../sky130nm.lib'
-.include 'nand2.spice'
+.include 'vsdcell_nand2_1x.spice'
 
-X1 A B VGND VPWR Y vsdcell_nand2_1x
+X1 A B VGND Y VPWR vsdcell_nand2_1x
 
 * Supplies
 VVGND VGND 0 0
