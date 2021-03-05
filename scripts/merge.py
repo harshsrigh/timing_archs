@@ -1,7 +1,7 @@
 import re
 
 class MergeLib():
-    def __init__(self, base_file, cells_file):
+    def __init__(self, base_file, cells_file, output_file):
 
         with open(base_file) as base_doc:
             self.base_doc = base_doc.read()
@@ -10,7 +10,8 @@ class MergeLib():
             self.cell_doc = cell_doc.read()
 
         self.removed_last_bracket = False
-        
+        self.output_file = output_file
+
     def cells_list(self):
         """Generates the list of cells"""
         # self.cell_list_base = []
@@ -55,9 +56,13 @@ class MergeLib():
             end_part = self.base_doc[-4:] 
             if '}' in  end_part:
                 new_lib = self.base_doc[0:-4] + '\n\t\t' + self.cell_doc + '\n}\n'
-        # print(new_lib)       
-        with open('sky_mod.lib', "w") as file_doc:
-            file_doc.write(new_lib)
+        # print(new_lib)
+        try:    
+            with open(self.output_file, "w") as file_doc:
+                file_doc.write(new_lib)
+            return True
+        except:
+            return False
 
 if __name__ == '__main__':
     base = 'sta_results/sky130_fd_sc_hd__tt_025C_1v80.lib'
