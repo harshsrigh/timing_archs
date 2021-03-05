@@ -10,7 +10,7 @@ This repository provides a flow for doing custom standard cell design for Skywat
     - [Rise Time](#rise-time)
     - [Fall Transition](#fall-transition)
     - [Rise Transition](#rise-transition)
-  - [Custom Standard Cell List and Pre-layout Results](#custom-standard-cell-list-and-pre-layout-results)
+  - [Custom Standard Cell List and Results](#custom-standard-cell-list-and-results)
   - [Schematic and spice file generation using Xschem (Optional)](#schematic-and-spice-file-generation-using-xschem-optional)
   - [Instruction to Generate Timing Liberty file](#instruction-to-generate-timing-liberty-file)
   - [Verification of generated liberty file with OpenSTA](#verification-of-generated-liberty-file-with-opensta)
@@ -66,9 +66,10 @@ Calculate the Fall time, Rise time, Fall Transition and Rise Transition.
         let rise_tran = (rt1-rt2)/1e-9
 
  
-## Custom Standard Cell List and Pre-layout Results     
-   [nand3_2x](custom_stdcell/nand3_2x/nand3_2x.spice) |  [ Timing Lib File](custom_stdcell/nand3_2x/timing.lib)       
-      <img src="custom_stdcell/nand3_2x/nand3_2x_out.png" alt="nand3_2x" width="350"/>   
+## Custom Standard Cell List and Results     
+   [Pre-layout nand2_1x ](custom_stdcell/nand2_1x/nand2_1x.spice) | [Post-layout nand2_1x ](custom_stdcell/nand2_1x/vsdcell_nand2_1x.spice) | [ Timing Lib File](custom_stdcell/nand2_1x/timing.lib) | [Modified Liberty File](sta_results/sky_mod.lib)         
+      <img src="custom_stdcell/nand2_1x/nand2_1x_out.png" alt="nand2_1x" width="350"/>
+      <img src="custom_stdcell/nand2_1x/nand2_1x_layout.png" alt="nand2_1x_layout" width="250"/>    
       
 ## Schematic and spice file generation using Xschem (Optional)
    * Software Requirement: Xschem 
@@ -80,7 +81,7 @@ Calculate the Fall time, Rise time, Fall Transition and Rise Transition.
 ## Instruction to Generate Timing Liberty file
 **Step 0: Perquisites based on Ubuntu OS**      
   * Software Requirements: NGSPICE and python 3   
-  * Numpy module download: `pip3 install numpy`   
+  * Numpy module download: `$ pip3 install numpy`   
   * Clone the repository: `$ git clone https://github.com/harshsrigh/timing_archs.git`        
   * Change Directory to timing_arch: `$ cd timing_arch`
   * All the commands need to be run from the root directory i.e `user_name@PC_name:~/timing_archs$`
@@ -90,27 +91,28 @@ Calculate the Fall time, Rise time, Fall Transition and Rise Transition.
    * Mention input vectors for input delay and load capacitor.
    * Mention Input and Output pins.
    * Enter Logic function.
+   * Enter Base Liberty File and output Liberty File
 
-**Nand3_2x example:**  [nand3_2x config.py](config.py)      
+**Nand3_2x example:**  [nand2_1x config.py](config.py)      
                  
-  * Replace 'custom_stdcell/nand3_2x/' directory with your cell working directory in config.py file.
-  * Similarly replace spice file name 'nand3_2x.spice' with your spice file name. Make sure the spice format has the subckt inside it with proper scaling factor.     
+  * Replace 'custom_stdcell/nand2_1x/' directory with your cell working directory in config.py file.
+  * Similarly replace spice file name 'nand2_1x.spice' with your spice file name. Make sure the spice format has the subckt inside it with proper scaling factor.     
     
     File Configuration:
     ``` py
     library_directory = ''
     library_file = path.join(library_directory, 'sky130nm.lib')
-    cell_directory = 'custom_stdcell/nand3_2x/' # Enter cell folder
-    spice_file = path.join(cell_directory, "nand3_2x.spice") # Enter .spice file
+    cell_directory = 'custom_stdcell/nand2_1x/' # Enter cell folder
+    spice_file = path.join(cell_directory, "nand3_1x.spice") # Enter .spice file
     output_folder =  path.join(cell_directory, "data")
     ```             
     Input Vector:
     ``` py
-    input_slew = '0.01n 0.023n 0.0531329n 0.122474n 0.282311n 0.650743 1.5n' # Only put the unit(do not include sec suffix)
+    input_transtion_time = '0.01n 0.023n 0.0531329n 0.122474n 0.282311n 0.650743 1.5n' # Only put the unit(do not include sec suffix)
     output_caps = '0.0005p 0.0012105800p 0.002931p 0.00709641p 0.0171815 0.0415991p 0.100718p' # Only put the unit(do not include Farad suffix)
-    input_pins = 'A B C' # TODO: extract from .lef files
+    input_pins = 'A B' # TODO: extract from .lef files
     output_pins = 'Y' # TODO: extract from .lef files
-    logic_function = 'not (A and B and C)' # Use keyword 'not', 'and' 'or'
+    logic_function = 'not (A and B)' # Use keyword 'not', 'and' 'or'
     ```         
 
 **Step 2: Execute python file**       
@@ -122,14 +124,13 @@ Calculate the Fall time, Rise time, Fall Transition and Rise Transition.
 ## Verification of generated liberty file with OpenSTA
 * Perquisites openSTA software. You could install using `sudo apt-get install openSTA`
 * Change directory to sta_results: `$ cd sta_results`
-* Copy the generated cell group of your standard cell to `sky130_fd_sc_hd__tt_025C_1v80.lib` as done for `vsdcell_nand3_2x`
+* Replace `picorv32a.synthesis.txt` file name to `picorv32a.synthesis.v`    
 * Edit the sta.conf and my_base.sdc as per your requirement.
 * Run OpenSTA using command: `$ sta sta.conf`.
 * Verify your cell of interest and make sure there is no warning due the liberty files.       
-    <img src="images/sta_nand3.png" alt="sta_nand3_2x" width="450"/>
+    <img src="images/sta_nand32.png" alt="sta_nand32" width="450"/>
 ## Future Works: 
 **(Focused on Combination circuits only without tri-state/HiZ)**
-* Test .lib files using openSTA tool.
-* Perform Layout on these 10 cells.
+* Perform Layout on these 9 cells.
 * Setup Power calculation harness for leakage power and internal power(total power - dynamic power)
 * Internal pin capacitance calculations
