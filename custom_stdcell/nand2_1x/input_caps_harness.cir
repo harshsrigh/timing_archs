@@ -1,18 +1,18 @@
 Test Harness  for vsdcell_nand2_1x
 .include 'sky130nm.lib' 
 .include 'custom_stdcell/nand2_1x/vsdcell_nand2_1x.spice'
-                    X1 A B VGND Y VPWR vsdcell_nand2_1x
-                    * Power Supplies
-                    VVPWR VPWR 0 DC 1.8
+    X1 A B VGND Y VPWR vsdcell_nand2_1x
+    * Power Supplies
+    VVPWR VPWR 0 DC 1.8
 VVGND VGND 0 DC 0
-                    * Signal Supplies
-                    VB B 0 PULSE(0 1.8 0 0.01n 0.01n 50ns 100ns)
+    * Signal Supplies
+    VB B 0 PULSE(0 1.8 0 0.01n 0.01n 50ns 100ns)
 VA A 0 DC 1.8
-                    * CLoad 
-                    CLoad Y 0 1f
-                    * Control Generations
-                    .control
-                    foreach case 1.8 0
+    * CLoad 
+    CLoad Y 0 1f
+    * Control Generations
+    .control
+    foreach case 1.8 0
 
                 if $case=0
                     * Fall Condition
@@ -34,6 +34,6 @@ VA A 0 DC 1.8
                     echo "B:rise_capacitance:$&rise_cap" >> custom_stdcell/nand2_1x/data/input_caps/input_pins_caps.txt 
                 end
             end
-                    rusage
-                    quit
-                    .endc
+    rusage
+    quit
+    .endc
