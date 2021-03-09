@@ -145,15 +145,16 @@ def timing_generator(files_folder, unate, related_pin='A'):
         each_attributes = gen_lib(in_rises, out_caps, timing_table, attr_name)
         timing_tables.append(each_attributes)
 
-    timing_str = f"""timing () {{
-        {timing_tables[0]}
-        {timing_tables[1]}
-        {timing_tables[2]}
-        related_pin : "{related_pin.upper()}";
-        {timing_tables[3]}
-        timing_sense : "{unate}";
-        timing_type : "combinational";
-        }} """
+    timing_str = \
+    f"""timing () {{
+                {timing_tables[0]}
+                {timing_tables[1]}
+                {timing_tables[2]}
+                related_pin : "{related_pin.upper()}";
+                {timing_tables[3]}
+                timing_sense : "{unate}";
+                timing_type : "combinational";
+            }} """
 
     return timing_str
 
@@ -166,7 +167,7 @@ def gen_lib(in_rises, out_caps, timing_table, attr_name):
     out_caps_str = ', '.join(out_caps)
     tables_data = ['"{}"'.format(', '.join(timing_table[num]))
                    for num in range(len(timing_table))]
-    timing_str = ', \\\n \t\t\t'.join(tables_data)
+    timing_str = ', \\\n \t\t\t\t\t\t'.join(tables_data)
 
     timing_cell = f"""{attr_name} ("del_1_{in_size}_{out_size}") {{
                     index_1("{in_rises_str}");
