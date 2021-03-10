@@ -12,22 +12,29 @@ logic_operator = {'and':'&',
                   'or': '|',
                   'not': '!'}
 
-def ng_postscript(meas_type, active_pin):
+def ng_postscript(meas_type, active_pin, pos_unate):
     """ Generate ngspice control commands for timing_harness"""
     
     if meas_type == 'timing':
         
         working_folder = path.join(output_folder,'timing')
-        # TODO: Shift this text based template to Jinja Templates if necessary
+
+        # To change the calculation of switching power as per the unate type
+        pos, neg = 0, 0
+        if pos_unate: pos = 1
+        else: neg = 1
+
+        # TODO: Shift this text based template to Jinja Templates if necessary   
         control_str = \
     f"""let run  = 0 \n foreach in_delay {input_transition_time}
     * Initiating Text Files in folder data
-    echo "input_delay:$in_delay" >> {working_folder}/input_delay.txt
-    echo "input_delay:$in_delay" >> {working_folder}/cell_fall.txt
-    echo "input_delay:$in_delay" >> {working_folder}/cell_rise.txt
-    echo "input_delay:$in_delay" >> {working_folder}/fall_transition.txt
-    echo "input_delay:$in_delay" >> {working_folder}/rise_transition.txt
-
+    echo "input_transion:$in_delay" >> {working_folder}/input_transion.txt
+    echo "input_transion:$in_delay" >> {working_folder}/cell_fall.txt
+    echo "input_transion:$in_delay" >> {working_folder}/cell_rise.txt
+    echo "input_transion:$in_delay" >> {working_folder}/fall_transition.txt
+    echo "input_transion:$in_delay" >> {working_folder}/rise_transition.txt
+    echo "input_transion:$in_delay" >> {working_folder}/rise_power.txt
+    echo "input_transion:$in_delay" >> {working_folder}/fall_power.txt
     * 1.666 to match the slew rate
     let actual_rtime = $in_delay*1.666   
 
@@ -52,8 +59,8 @@ def ng_postscript(meas_type, active_pin):
         meas tran ts4 when v({active_pin})=0.36 FALL=1
         let RISE_IN_SLEW = (ts1-ts2)/{time_unit}
         let FALL_IN_SLEW = (ts4-ts3)/{time_unit}
-        echo "actual_rise_slew:$&RISE_IN_SLEW" >> {working_folder}/input_delay.txt
-        echo "actual_fall_slew:$&FALL_IN_SLEW" >> {working_folder}/input_delay.txt
+        echo "actual_rise_slew:$&RISE_IN_SLEW" >> {working_folder}/input_transion.txt
+        echo "actual_fall_slew:$&FALL_IN_SLEW" >> {working_folder}/input_transion.txt
 
 
         print run
@@ -94,6 +101,50 @@ def ng_postscript(meas_type, active_pin):
         let rise_tran = ((rt1-rt2)/{time_unit})
         print rise_tran
         echo "out_cap:$out_cap:rise_transition:$&rise_tran" >> {working_folder}/rise_transition.txt
+        * Set unate to 1 for positive_unate and 0 for negative_unate
+        let pos_unate = {pos}
+        let neg_unate = {neg} 
+        if pos_unate
+            * Measuring Rising Power if Positive Unate
+            meas tran pt1 when v({active_pin})=0.1 RISE=2
+            meas tran pt2 when v(Y)=1.79 RISE=2
+            * To avoid error due to peaks
+            if pt1 > pt2 
+                meas tran pt2 when v(Y)=1.79 RISE=3
+            end
+            let pwr_stc1 = (@CLOAD[i])*Y
+            meas tran pwr_swt1 INTEG pwr_stc1 from=pt1 to=pt2
+            let pwr_swt1 = pwr_swt1/1p
+            echo "out_cap:$out_cap:power_switch:$&pwr_swt1" >> {working_folder}/rise_power.txt
+
+            * Measuring Falling Power if Positive Unate
+            meas tran pt1 when v({active_pin})=1.79 FALL=2
+            meas tran pt2 when v(Y)=0.1 FALL=2
+            let pwr_stc2 = (@CLOAD[i])*Y
+            meas tran pwr_swt2 INTEG pwr_stc2 from=pt1 to=pt2
+            let pwr_swt2 = pwr_swt2/1p
+            echo "out_cap:$out_cap:power_switch:$&pwr_swt2" >> {working_folder}/fall_power.txt
+        end
+        if neg_unate
+            * Measuring Rising Power if Negative Unate
+            meas tran pt1 when v({active_pin})=1.75 FALL=2
+            meas tran pt2 when v(Y)=1.75 RISE=2
+            if pt1 > pt2
+                meas tran pt1 when v({active_pin})=1.75 FALL=3
+            end
+            let pwr_stc1 = (@CLOAD[i])*Y
+            meas tran pwr_swt1 INTEG pwr_stc1 from=pt1 to=pt2
+            let pwr_swt1 = pwr_swt1/1p
+            echo "out_cap:$out_cap:power_switch:$&pwr_swt1" >> {working_folder}/rise_power.txt
+
+            * Measuring Falling Power if Negative Unate
+            meas tran pt1 when v({active_pin})=0.1 RISE=2
+            meas tran pt2 when v(Y)=0.1 RISE=2
+            let pwr_stc2 = (@CLOAD[i])*Y
+            meas tran pwr_swt2 INTEG pwr_stc2 from=pt1 to=pt2
+            let pwr_swt2 = pwr_swt2/1p
+            echo "out_cap:$out_cap:power_switch:$&pwr_swt2" >> {working_folder}/fall_power.txt
+        end
         let run = run + 1
         * plot a y
     end
@@ -174,11 +225,12 @@ def Simulation_env(netlist_pins, spice_card, active_pin, sim_type = 'timing'):
     include_statements = f".include '{library_file}' \n.include '{spice_file}'"
     input_pin_str = ' '.join(input_pins)
     power, signal, pos_unate = voltage_deductions(input_pin_str, output_pins[0], logic_function, active_pin, netlist_pins)
-    control_text, working_folder = ng_postscript(sim_type, active_pin)
+    control_text, working_folder = ng_postscript(sim_type, active_pin, pos_unate)
     harness_name = f"{sim_type}_harness.cir"
     harness_file = path.join(cell_directory, harness_name)
     final_text = \
     f"""Test Harness  for {spice_card}\n{include_statements}
+    .options savecurrents 
     X1 {netlist_pins} {spice_card}
     * Power Supplies
     {power}
@@ -243,15 +295,16 @@ def pwr_pin_text(pwr_pins):
     
     return pwr_pins_list
 
-def timing_lib(card, timing_list, inpin_list, cell_dict):
+def timing_lib(card, timing_list, power_swt_list, inpin_list, cell_dict):
     """ Generate .lib file """
     
-    pwr_pins = [pin for pin in pin_list if cell_dict['pin'][pin]['use'] == 'POWER']
+    pwr_pins = [pin for pin in pin_list if cell_dict['pin'][pin]['use'] in ['POWER', 'GROUND']]
     pwr_pin_list = pwr_pin_text(pwr_pins)
 
     logic_func = conv_logical(logic_function)
     cell_lib_file = path.join(cell_directory, 'timing.lib')
     timing_txt = '\n\t\t\t'.join(timing_list)
+    power_swt_txt = '\n\t\t\t'.join(power_swt_list)
     input_pin_txt = '\n\t\t'.join(inpin_list) 
     pwr_pin_txt = '\n\t\t'.join(pwr_pin_list)
     cell_area = cell_dict['area']
@@ -265,6 +318,7 @@ def timing_lib(card, timing_list, inpin_list, cell_dict):
             power_down_function : "(!VPWR + VGND)";
             related_ground_pin : "VGND";
             related_power_pin : "VPWR";
+            {power_swt_txt}
             {timing_txt}  
         }}
     }}    
@@ -274,12 +328,12 @@ def timing_lib(card, timing_list, inpin_list, cell_dict):
 
     print(f'Check:  {cell_lib_file}')
     # To Merge File with the Base file
-    merge_obj = merge.MergeLib(base_file=lib_file, cells_file=cell_lib_file, output_file=merged_file_file)
-    status = merge_obj.add_cells()
-    if status:
-        print(f'Updated Liberty File: {merged_file_file}')
-    else:
-        print(f'Manually add the timing lib using {cell_lib_file}')
+    # merge_obj = merge.MergeLib(base_file=lib_file, cells_file=cell_lib_file, output_file=merged_file_file)
+    # status = merge_obj.add_cells()
+    # if status:
+    #     print(f'Updated Liberty File: {merged_file_file}')
+    # else:
+    #     print(f'Manually add the timing lib using {cell_lib_file}')
 
 def lef_extract(lef_file = 'custom_stdcell/nand2_1x/vsdcell_nand2_1x.lef'):
     """ Extract Pin information from the lef file"""
@@ -351,6 +405,7 @@ def lef_extract(lef_file = 'custom_stdcell/nand2_1x/vsdcell_nand2_1x.lef'):
 if __name__ == '__main__':
     pins, card = read_spice()
     timing_list = []
+    power_swt_list = []
     pins_list = []
     cell_dict = lef_extract(lef_file)
     pin_list = list(cell_dict['pin'].keys())
@@ -369,8 +424,9 @@ if __name__ == '__main__':
         undte_value = 'positive_unate' if pos_unate == True else 'negative_unate'
         pin_info = timing.input_pins(caps_folder, active_pin, '1.5') 
         pins_list.append(pin_info)
-        timing_info = timing.timing_generator(timing_folder, unate=undte_value, related_pin=active_pin)
+        timing_info, power_swt_info = timing.timing_generator(timing_folder, unate=undte_value, related_pin=active_pin)
         timing_list.append(timing_info)
+        power_swt_list.append(power_swt_info)
 
-    timing_lib(card, timing_list, pins_list, cell_dict)   
+    timing_lib(card, timing_list, power_swt_list,pins_list, cell_dict)   
        

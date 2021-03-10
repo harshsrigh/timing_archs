@@ -1,0 +1,104 @@
+VERSION 5.7 ;
+  NOWIREEXTENSIONATPIN ON ;
+  DIVIDERCHAR "/" ;
+  BUSBITCHARS "[]" ;
+MACRO sky130_or2_1x
+  CLASS CORE ;
+  FOREIGN sky130_or2_1x ;
+  ORIGIN 0.000 0.000 ;
+  SIZE 2.300 BY 2.720 ;
+  SYMMETRY X Y R90 ;
+  SITE unithd ;
+  PIN A
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    ANTENNAGATEAREA 0.126000 ;
+    PORT
+      LAYER li1 ;
+        RECT 1.010 0.995 1.335 1.615 ;
+    END
+  END A
+  PIN B
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    ANTENNAGATEAREA 0.126000 ;
+    PORT
+      LAYER li1 ;
+        RECT 0.145 0.995 0.500 1.615 ;
+    END
+  END B
+  PIN VGND
+    DIRECTION INOUT ;
+    USE GROUND ;
+    SHAPE ABUTMENT ;
+    PORT
+      LAYER li1 ;
+        RECT 0.250 0.085 0.490 0.825 ;
+        RECT 1.180 0.085 1.395 0.825 ;
+        RECT 0.000 -0.085 2.300 0.085 ;
+      LAYER mcon ;
+        RECT 0.145 -0.085 0.315 0.085 ;
+        RECT 0.605 -0.085 0.775 0.085 ;
+        RECT 1.065 -0.085 1.235 0.085 ;
+        RECT 1.525 -0.085 1.695 0.085 ;
+        RECT 1.985 -0.085 2.155 0.085 ;
+      LAYER met1 ;
+        RECT 0.000 -0.240 2.300 0.240 ;
+    END
+  END VGND
+  PIN VNB
+    DIRECTION INOUT ;
+    USE GROUND ;
+    PORT
+      LAYER pwell ;
+        RECT 0.145 -0.085 0.315 0.085 ;
+    END
+  END VNB
+  PIN VPB
+    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER nwell ;
+        RECT -0.190 1.305 2.490 2.910 ;
+    END
+  END VPB
+  PIN VPWR
+    DIRECTION INOUT ;
+    USE POWER ;
+    SHAPE ABUTMENT ;
+    PORT
+      LAYER li1 ;
+        RECT 0.000 2.635 2.300 2.805 ;
+        RECT 1.145 2.125 1.475 2.635 ;
+      LAYER mcon ;
+        RECT 0.145 2.635 0.315 2.805 ;
+        RECT 0.605 2.635 0.775 2.805 ;
+        RECT 1.065 2.635 1.235 2.805 ;
+        RECT 1.525 2.635 1.695 2.805 ;
+        RECT 1.985 2.635 2.155 2.805 ;
+      LAYER met1 ;
+        RECT 0.000 2.480 2.300 2.960 ;
+    END
+  END VPWR
+  PIN Y
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    ANTENNADIFFAREA 0.326800 ;
+    PORT
+      LAYER li1 ;
+        RECT 1.645 2.135 2.180 2.465 ;
+        RECT 1.865 0.825 2.180 2.135 ;
+        RECT 1.565 0.525 2.180 0.825 ;
+    END
+  END Y
+  OBS
+      LAYER li1 ;
+        RECT 0.270 1.955 0.660 2.130 ;
+        RECT 0.270 1.785 1.695 1.955 ;
+        RECT 0.670 0.825 0.840 1.785 ;
+        RECT 1.525 0.995 1.695 1.785 ;
+        RECT 0.670 0.425 0.950 0.825 ;
+  END
+END sky130_or2_1x
+END LIBRARY
+
