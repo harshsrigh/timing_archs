@@ -1,4 +1,4 @@
-input_delay:0.01n
+input_transition:0.01n
 out_cap:0.0005p:cell_fall:0.0242541
 out_cap:0.0012105800p:cell_fall:0.030363
 out_cap:0.002931p:cell_fall:0.044592
@@ -6,7 +6,7 @@ out_cap:0.00709641p:cell_fall:0.0779625
 out_cap:0.0171815p:cell_fall:0.157683
 out_cap:0.0415991p:cell_fall:0.35006
 out_cap:0.100718p:cell_fall:0.815523
-input_delay:0.023n
+input_transition:0.023n
 out_cap:0.0005p:cell_fall:0.0275648
 out_cap:0.0012105800p:cell_fall:0.0336515
 out_cap:0.002931p:cell_fall:0.0482149
@@ -14,7 +14,7 @@ out_cap:0.00709641p:cell_fall:0.0819049
 out_cap:0.0171815p:cell_fall:0.161892
 out_cap:0.0415991p:cell_fall:0.354405
 out_cap:0.100718p:cell_fall:0.819934
-input_delay:0.0531329n
+input_transition:0.0531329n
 out_cap:0.0005p:cell_fall:0.0365057
 out_cap:0.0012105800p:cell_fall:0.0436342
 out_cap:0.002931p:cell_fall:0.0580034
@@ -22,7 +22,7 @@ out_cap:0.00709641p:cell_fall:0.091909
 out_cap:0.0171815p:cell_fall:0.172265
 out_cap:0.0415991p:cell_fall:0.365061
 out_cap:0.100718p:cell_fall:0.830731
-input_delay:0.122474n
+input_transition:0.122474n
 out_cap:0.0005p:cell_fall:0.0489453
 out_cap:0.0012105800p:cell_fall:0.0594141
 out_cap:0.002931p:cell_fall:0.0795525
@@ -30,7 +30,7 @@ out_cap:0.00709641p:cell_fall:0.115773
 out_cap:0.0171815p:cell_fall:0.196137
 out_cap:0.0415991p:cell_fall:0.389231
 out_cap:0.100718p:cell_fall:0.855133
-input_delay:0.282311n
+input_transition:0.282311n
 out_cap:0.0005p:cell_fall:0.0643555
 out_cap:0.0012105800p:cell_fall:0.0796763
 out_cap:0.002931p:cell_fall:0.109555
@@ -38,7 +38,7 @@ out_cap:0.00709641p:cell_fall:0.162868
 out_cap:0.0171815p:cell_fall:0.252814
 out_cap:0.0415991p:cell_fall:0.445474
 out_cap:0.100718p:cell_fall:0.911454
-input_delay:0.650743n
+input_transition:0.650743n
 out_cap:0.0005p:cell_fall:0.0837155
 out_cap:0.0012105800p:cell_fall:0.105365
 out_cap:0.002931p:cell_fall:0.148134
@@ -46,7 +46,7 @@ out_cap:0.00709641p:cell_fall:0.226366
 out_cap:0.0171815p:cell_fall:0.359683
 out_cap:0.0415991p:cell_fall:0.577799
 out_cap:0.100718p:cell_fall:1.04235
-input_delay:1.5n
+input_transition:1.5n
 out_cap:0.0005p:cell_fall:0.107021
 out_cap:0.0012105800p:cell_fall:0.13733
 out_cap:0.002931p:cell_fall:0.197552

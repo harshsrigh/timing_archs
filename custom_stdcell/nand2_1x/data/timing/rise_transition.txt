@@ -1,4 +1,4 @@
-input_delay:0.01n
+input_transition:0.01n
 out_cap:0.0005p:rise_transition:0.0127
 out_cap:0.0012105800p:rise_transition:0.0186
 out_cap:0.002931p:rise_transition:0.0317
@@ -6,7 +6,7 @@ out_cap:0.00709641p:rise_transition:0.0632
 out_cap:0.0171815p:rise_transition:0.14
 out_cap:0.0415991p:rise_transition:0.3267
 out_cap:0.100718p:rise_transition:0.7786
-input_delay:0.023n
+input_transition:0.023n
 out_cap:0.0005p:rise_transition:0.0148
 out_cap:0.0012105800p:rise_transition:0.019
 out_cap:0.002931p:rise_transition:0.0314
@@ -14,7 +14,7 @@ out_cap:0.00709641p:rise_transition:0.063
 out_cap:0.0171815p:rise_transition:0.1401
 out_cap:0.0415991p:rise_transition:0.3266
 out_cap:0.100718p:rise_transition:0.7786
-input_delay:0.0531329n
+input_transition:0.0531329n
 out_cap:0.0005p:rise_transition:0.023
 out_cap:0.0012105800p:rise_transition:0.0259
 out_cap:0.002931p:rise_transition:0.0354
@@ -22,7 +22,7 @@ out_cap:0.00709641p:rise_transition:0.0635
 out_cap:0.0171815p:rise_transition:0.1401
 out_cap:0.0415991p:rise_transition:0.3267
 out_cap:0.100718p:rise_transition:0.7786
-input_delay:0.122474n
+input_transition:0.122474n
 out_cap:0.0005p:rise_transition:0.0373
 out_cap:0.0012105800p:rise_transition:0.043
 out_cap:0.002931p:rise_transition:0.0535
@@ -30,7 +30,7 @@ out_cap:0.00709641p:rise_transition:0.0751
 out_cap:0.0171815p:rise_transition:0.1417
 out_cap:0.0415991p:rise_transition:0.3267
 out_cap:0.100718p:rise_transition:0.7786
-input_delay:0.282311n
+input_transition:0.282311n
 out_cap:0.0005p:rise_transition:0.0602
 out_cap:0.0012105800p:rise_transition:0.0699
 out_cap:0.002931p:rise_transition:0.088
@@ -38,7 +38,7 @@ out_cap:0.00709641p:rise_transition:0.1173
 out_cap:0.0171815p:rise_transition:0.1701
 out_cap:0.0415991p:rise_transition:0.3307
 out_cap:0.100718p:rise_transition:0.7786
-input_delay:0.650743n
+input_transition:0.650743n
 out_cap:0.0005p:rise_transition:0.1025
 out_cap:0.0012105800p:rise_transition:0.1168
 out_cap:0.002931p:rise_transition:0.145
@@ -46,7 +46,7 @@ out_cap:0.00709641p:rise_transition:0.1933
 out_cap:0.0171815p:rise_transition:0.2676
 out_cap:0.0415991p:rise_transition:0.3964
 out_cap:0.100718p:rise_transition:0.7869
-input_delay:1.5n
+input_transition:1.5n
 out_cap:0.0005p:rise_transition:0.1861
 out_cap:0.0012105800p:rise_transition:0.2053
 out_cap:0.002931p:rise_transition:0.2449

@@ -87,7 +87,7 @@ def read_spicetxt(filepath, in_size=7):
 
     Returns
     -------
-    input_delay : list
+    input_transition : list
         Input Delay Vector(index_1)
 
     output_cap : list
@@ -101,7 +101,7 @@ def read_spicetxt(filepath, in_size=7):
         # read file content
         data = file_object.read()
 
-    input_delay = []
+    input_transition = []
     output_cap = []
     timing_vector = []
     # TODO: To format the vectors as per unit required in .lib file
@@ -110,9 +110,9 @@ def read_spicetxt(filepath, in_size=7):
         # print(agr_data)
         if len(agr_data) == 2:
 
-            if agr_data[0] == 'input_delay':
+            if agr_data[0] == 'input_transition':
                 in_delay_val = re.sub('[a-z]+', '', agr_data[1])
-                input_delay.append(liberty_float(in_delay_val))
+                input_transition.append(liberty_float(in_delay_val))
 
         elif len(agr_data) == 4:
 
@@ -124,12 +124,12 @@ def read_spicetxt(filepath, in_size=7):
     # Size of Cap Vector
     cap_size = len(list(set(output_cap)))
     # Size of Input Delay Vector
-    delay_size = len(input_delay)
+    delay_size = len(input_transition)
     # Resizing timing 1-D vector to 2-D
     timing_vector_2d = np.array(timing_vector)
     timing_vector_2d.resize(delay_size, cap_size)
 
-    return input_delay, output_cap[:cap_size], timing_vector_2d
+    return input_transition, output_cap[:cap_size], timing_vector_2d
 
 
 def timing_generator(files_folder, unate, related_pin='A'):

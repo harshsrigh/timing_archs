@@ -16,13 +16,13 @@ VA A 0 DC 1.8
     let run  = 0 
  foreach in_delay 0.01n 0.023n 0.0531329n 0.122474n 0.282311n 0.650743n 1.5n
     * Initiating Text Files in folder data
-    echo "input_delay:$in_delay" >> custom_stdcell/nand2_1x/data/timing/input_delay.txt
-    echo "input_delay:$in_delay" >> custom_stdcell/nand2_1x/data/timing/cell_fall.txt
-    echo "input_delay:$in_delay" >> custom_stdcell/nand2_1x/data/timing/cell_rise.txt
-    echo "input_delay:$in_delay" >> custom_stdcell/nand2_1x/data/timing/fall_transition.txt
-    echo "input_delay:$in_delay" >> custom_stdcell/nand2_1x/data/timing/rise_transition.txt
-    echo "input_delay:$in_delay" >> custom_stdcell/nand2_1x/data/timing/rise_power.txt
-    echo "input_delay:$in_delay" >> custom_stdcell/nand2_1x/data/timing/fall_power.txt
+    echo "input_transition:$in_delay" >> custom_stdcell/nand2_1x/data/timing/input_transition.txt
+    echo "input_transition:$in_delay" >> custom_stdcell/nand2_1x/data/timing/cell_fall.txt
+    echo "input_transition:$in_delay" >> custom_stdcell/nand2_1x/data/timing/cell_rise.txt
+    echo "input_transition:$in_delay" >> custom_stdcell/nand2_1x/data/timing/fall_transition.txt
+    echo "input_transition:$in_delay" >> custom_stdcell/nand2_1x/data/timing/rise_transition.txt
+    echo "input_transition:$in_delay" >> custom_stdcell/nand2_1x/data/timing/rise_power.txt
+    echo "input_transition:$in_delay" >> custom_stdcell/nand2_1x/data/timing/fall_power.txt
     * 1.666 to match the slew rate
     let actual_rtime = $in_delay*1.666   
 
@@ -47,8 +47,8 @@ VA A 0 DC 1.8
         meas tran ts4 when v(B)=0.36 FALL=1
         let RISE_IN_SLEW = (ts1-ts2)/1e-09
         let FALL_IN_SLEW = (ts4-ts3)/1e-09
-        echo "actual_rise_slew:$&RISE_IN_SLEW" >> custom_stdcell/nand2_1x/data/timing/input_delay.txt
-        echo "actual_fall_slew:$&FALL_IN_SLEW" >> custom_stdcell/nand2_1x/data/timing/input_delay.txt
+        echo "actual_rise_slew:$&RISE_IN_SLEW" >> custom_stdcell/nand2_1x/data/timing/input_transition.txt
+        echo "actual_fall_slew:$&FALL_IN_SLEW" >> custom_stdcell/nand2_1x/data/timing/input_transition.txt
 
 
         print run
