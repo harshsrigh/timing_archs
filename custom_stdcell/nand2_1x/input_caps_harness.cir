@@ -1,10 +1,11 @@
-Test Harness  for vsdcell_nand2_1x
+Test Harness  for sky130_vsdnand2_1x
 .include 'sky130nm.lib' 
-.include 'custom_stdcell/nand2_1x/vsdcell_nand2_1x.spice'
+.include 'custom_stdcell/nand2_1x/sky130_vsdnand2_1x.spice'
     .options savecurrents 
-    X1 A B VGND Y VPWR vsdcell_nand2_1x
+    X1 A B VGND VPWR VPB Y sky130_vsdnand2_1x
     * Power Supplies
     VVPWR VPWR 0 DC 1.8
+VVPB VPB 0 DC 1.8
 VVGND VGND 0 DC 0
     * Signal Supplies
     VB B 0 PULSE(0 1.8 0 0.01n 0.01n 50ns 100ns)

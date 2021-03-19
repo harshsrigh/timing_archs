@@ -1,10 +1,11 @@
-Test Harness  for vsdcell_nand2_1x
+Test Harness  for sky130_vsdnand2_1x
 .include 'sky130nm.lib' 
-.include 'custom_stdcell/nand2_1x/vsdcell_nand2_1x.spice'
+.include 'custom_stdcell/nand2_1x/sky130_vsdnand2_1x.spice'
     .options savecurrents 
-    X1 A B VGND Y VPWR vsdcell_nand2_1x
+    X1 A B VGND VPWR VPB Y sky130_vsdnand2_1x
     * Power Supplies
     VVPWR VPWR 0 DC 1.8
+VVPB VPB 0 DC 1.8
 VVGND VGND 0 DC 0
     * Signal Supplies
     VB B 0 PULSE(0 1.8 0 0.01n 0.01n 50ns 100ns)
@@ -100,7 +101,7 @@ VA A 0 DC 1.8
             if pt1 > pt2 
                 meas tran pt2 when v(Y)=1.79 RISE=3
             end
-            let pwr_stc1 = (@CLOAD[i])*Y
+            let pwr_stc1 = (@CLOAD[i])*Y 
             meas tran pwr_swt1 INTEG pwr_stc1 from=pt1 to=pt2
             let pwr_swt1 = pwr_swt1/1p
             echo "out_cap:$out_cap:power_switch:$&pwr_swt1" >> custom_stdcell/nand2_1x/data/timing/rise_power.txt
@@ -108,7 +109,7 @@ VA A 0 DC 1.8
             * Measuring Falling Power if Positive Unate
             meas tran pt1 when v(B)=1.79 FALL=2
             meas tran pt2 when v(Y)=0.1 FALL=2
-            let pwr_stc2 = (@CLOAD[i])*Y
+            let pwr_stc2 = (@CLOAD[i])*Y - (@(VVPWR#branch)*VPWR)
             meas tran pwr_swt2 INTEG pwr_stc2 from=pt1 to=pt2
             let pwr_swt2 = pwr_swt2/1p
             echo "out_cap:$out_cap:power_switch:$&pwr_swt2" >> custom_stdcell/nand2_1x/data/timing/fall_power.txt
@@ -128,7 +129,7 @@ VA A 0 DC 1.8
             * Measuring Falling Power if Negative Unate
             meas tran pt1 when v(B)=0.1 RISE=2
             meas tran pt2 when v(Y)=0.1 RISE=2
-            let pwr_stc2 = (@CLOAD[i])*Y
+            let pwr_stc2 = (@CLOAD[i])*Y - (@(VVPWR#branch)*VPWR)
             meas tran pwr_swt2 INTEG pwr_stc2 from=pt1 to=pt2
             let pwr_swt2 = pwr_swt2/1p
             echo "out_cap:$out_cap:power_switch:$&pwr_swt2" >> custom_stdcell/nand2_1x/data/timing/fall_power.txt

@@ -1,0 +1,22 @@
+* SPICE3 file created from sky130_vsdnand2_1x.ext - technology: sky130A
+
+.option scale=0.01u
+
+.subckt sky130_vsdnand2_1x A B VGND VPWR VPB Y
+X0 Y A VPWR VPB sky130_fd_pr__pfet_01v8 w=70 l=15
+X1 VPWR B Y VPB sky130_fd_pr__pfet_01v8 w=70 l=15
+X2 a_52_40# A VGND VGND sky130_fd_pr__nfet_01v8 w=43 l=15
+X3 Y B a_52_40# VGND sky130_fd_pr__nfet_01v8 w=43 l=15
+C0 Y VPWR 0.21fF
+C1 VPWR B 0.02fF
+C2 Y a_52_40# 0.06fF
+C3 Y A 0.05fF
+C4 VPWR VPB 0.02fF
+C5 A B 0.07fF
+C6 Y B 0.12fF
+C7 Y VPB 0.00fF
+C8 VPWR A 0.02fF
+C9 VPWR VGND 0.38fF
+C10 Y VGND 0.15fF
+C11 VPB VGND 0.18fF
+.ends
