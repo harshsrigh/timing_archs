@@ -14,6 +14,14 @@ This repository provides a flow for doing custom standard cell design for Skywat
   - [Schematic and spice file generation using Xschem (Optional)](#schematic-and-spice-file-generation-using-xschem-optional)
   - [Instruction to Generate Timing Liberty file](#instruction-to-generate-timing-liberty-file)
   - [Verification of generated liberty file with OpenSTA](#verification-of-generated-liberty-file-with-opensta)
+  - [Verification of generated Liberty File with OpenLane](#verification-of-generated-liberty-file-with-openlane)
+    - [OpenLane Requirements](#openlane-requirements)
+    - [Custom Cells and Skywater 130nm Cells:](#custom-cells-and-skywater-130nm-cells)
+    - [Synthesis](#synthesis)
+    - [Floor-planning](#floor-planning)
+    - [Placement](#placement)
+    - [CTS](#cts)
+    - [Routing:](#routing)
   - [Future Works:](#future-works)
 
 ## What is Non Linear Delay Model(NLDM)?
@@ -129,8 +137,42 @@ Calculate the Fall time, Rise time, Fall Transition and Rise Transition.
 * Run OpenSTA using command: `$ sta sta.conf`.
 * Verify your cell of interest and make sure there is no warning due the liberty files.       
     <img src="images/sta_nand32.png" alt="sta_nand32" width="450"/>
+## Verification of generated Liberty File with OpenLane
+### OpenLane Requirements
+* Install OpenLane as mentioned in repo [OpenLANE Built Script](https://github.com/nickson-jose/openlane_build_script)
+* [OpenLane Workshop repo for tool flow](https://github.com/harshsrigh/openlane_sky130nm_vsdworkshop)
+### Custom Cells and Skywater 130nm Cells:
+All of the custom cells used are combination cell(as shown below) and Sequential cell like D Flip-Flop is taken from Skywater 130nm Library for now.
+  * **Skywater Library cells**: sky130_fd_sc_hd__dfxtp_4,  sky130_fd_sc_hd__buf_2, and sky130_fd_sc_hd__conb_1.
+  * **Custom cells**: sky130_vsdbuf_1x, sky130_vsdbuf_2x, sky130_vsdclkbuf_4x, sky130_vsdinv_1x, sky130_vsdinv_8x, sky130_vsdnand2_1x, sky130_vsdnand3_1x, sky130_vsdnand4_1x and sky130_vsdo21ai_1x.     
+* **Liberty File**: [sky_mod1.lib](sta_results/sky_mod1.lib)    
+
+### Synthesis
+* Designed used for verification: picorv32a   
+* Edit config.tcl to -      
+  <img src="images/configtcl.png" alt="config" width="450"/>
+* Synthesis Result:   
+  <img src="images/synthesis.png" alt="config" width="300"/>
+
+### Floor-planning
+* Command: `run_floorplan`   
+* Layout can be viewed in magic with predefined taps, io pins and decoupling Caps: `magic -T ~/sky130A.tech lef read ~/merged.lef def read picorv32a.floorplan.def`
+
+### Placement
+ * Command: `run_placement`
+ * Layout:    
+  <img src="images/placement.png" alt="placement" width="450"/>
+
+### CTS
+* Command: `run_cts`
+* Layout:   
+<img src="images/cts.png" alt="placement" width="250"/>
+
+### Routing:
+* Command: `run_routing`
+* Facing High congestion issue need to add more cells in to the library and re-check port position in the custom cells.
+  
 ## Future Works: 
-**(Focused on Combination circuits only without tri-state/HiZ)**
-* Perform Layout on these 9 cells.
-* Setup Power calculation harness for leakage power and internal power(total power - dynamic power)
-* Internal pin capacitance calculations
+* Improve the layout of custom cells for the routing(375 iter-> 81 Overflows)
+* Work on Simple D-Flip Flop characterization using Bisection method for determining the setup time, hold and minimum pulse width.
+
