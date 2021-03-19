@@ -87,7 +87,7 @@ def read_spicetxt(filepath, in_size=7):
 
     Returns
     -------
-    input_delay : list
+    input_transition : list
         Input Delay Vector(index_1)
 
     output_cap : list
@@ -101,7 +101,7 @@ def read_spicetxt(filepath, in_size=7):
         # read file content
         data = file_object.read()
 
-    input_delay = []
+    input_transition = []
     output_cap = []
     timing_vector = []
     # TODO: To format the vectors as per unit required in .lib file
@@ -110,9 +110,9 @@ def read_spicetxt(filepath, in_size=7):
         # print(agr_data)
         if len(agr_data) == 2:
 
-            if agr_data[0] == 'input_delay':
+            if agr_data[0] == 'input_transition':
                 in_delay_val = re.sub('[a-z]+', '', agr_data[1])
-                input_delay.append(liberty_float(in_delay_val))
+                input_transition.append(liberty_float(in_delay_val))
 
         elif len(agr_data) == 4:
 
@@ -124,56 +124,70 @@ def read_spicetxt(filepath, in_size=7):
     # Size of Cap Vector
     cap_size = len(list(set(output_cap)))
     # Size of Input Delay Vector
-    delay_size = len(input_delay)
+    delay_size = len(input_transition)
     # Resizing timing 1-D vector to 2-D
     timing_vector_2d = np.array(timing_vector)
     timing_vector_2d.resize(delay_size, cap_size)
 
-    return input_delay, output_cap[:cap_size], timing_vector_2d
+    return input_transition, output_cap[:cap_size], timing_vector_2d
 
 
 def timing_generator(files_folder, unate, related_pin='A'):
     """Generates the timing block in .lib format  """
     # TODO: Make Global variable
     attributes_names = ['cell_fall', 'cell_rise',
-                        'fall_transition', 'rise_transition']
+                        'fall_transition', 'rise_transition',
+                        'fall_power', 'rise_power']
     timing_tables = []
     for attr_name in attributes_names:
         file_name = attr_name + '.txt'
         file_location = path.join(files_folder, file_name)
         in_rises, out_caps, timing_table = read_spicetxt(file_location)
-        each_attributes = gen_lib(in_rises, out_caps, timing_table, attr_name)
+        if 'fall_power' == attr_name or 'rise_power' == attr_name: type_sim = 'power'
+        else: type_sim = 'timing'
+        each_attributes = gen_lib(in_rises, out_caps, timing_table, attr_name, type_sim)
         timing_tables.append(each_attributes)
 
-    timing_str = f"""timing () {{
-        {timing_tables[0]}
-        {timing_tables[1]}
-        {timing_tables[2]}
-        related_pin : "{related_pin.upper()}";
-        {timing_tables[3]}
-        timing_sense : "{unate}";
-        timing_type : "combinational";
-        }} """
+    timing_str = \
+    f"""timing () {{
+                {timing_tables[0]}
+                {timing_tables[1]}
+                {timing_tables[2]}
+                related_pin : "{related_pin.upper()}";
+                {timing_tables[3]}
+                timing_sense : "{unate}";
+                timing_type : "combinational";
+            }} """
 
-    return timing_str
+    power_str = \
+    f"""internal_power () {{
+                {timing_tables[4]}
+                related_pin : "{related_pin.upper()}";
+                {timing_tables[5]}
+            }} """
+
+    return timing_str, power_str
 
 
-def gen_lib(in_rises, out_caps, timing_table, attr_name):
+def gen_lib(in_rises, out_caps, data_table, attr_name, type_sim= 'timing'):
     """Format the each attribute content in .lib format """
     in_size = len(in_rises)
     out_size = len(out_caps)
     in_rises_str = ', '.join(in_rises)
     out_caps_str = ', '.join(out_caps)
-    tables_data = ['"{}"'.format(', '.join(timing_table[num]))
-                   for num in range(len(timing_table))]
-    timing_str = ', \\\n \t\t\t'.join(tables_data)
+    tables_data = ['"{}"'.format(', '.join(data_table[num]))
+                   for num in range(len(data_table))]
+    data_str = ', \\\n \t\t\t\t\t\t'.join(tables_data)
+    
+    if type_sim == 'timing': lut = f'del_1_{in_size}_{out_size}'
+    elif type_sim == 'power': lut = 'power_outputs_1'
 
-    timing_cell = f"""{attr_name} ("del_1_{in_size}_{out_size}") {{
+    data_cell = f"""{attr_name} ("{lut}") {{
                     index_1("{in_rises_str}");
                     index_2("{out_caps_str}"); 
-                    values({timing_str});
+                    values({data_str});
                 }}"""
-    return timing_cell
+    return data_cell
 
 def input_pins(file_path, active_pin, max_tran):
     """Sets up the input pins information for the cell group """

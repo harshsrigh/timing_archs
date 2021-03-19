@@ -1,4 +1,4 @@
-input_delay:0.01n
+input_transition:0.01n
 out_cap:0.0005p:cell_rise:0.01603
 out_cap:0.0012105800p:cell_rise:0.02024
 out_cap:0.002931p:cell_rise:0.02964
@@ -6,7 +6,7 @@ out_cap:0.00709641p:cell_rise:0.05151
 out_cap:0.0171815p:cell_rise:0.10402
 out_cap:0.0415991p:cell_rise:0.23076
 out_cap:0.100718p:cell_rise:0.53738
-input_delay:0.023n
+input_transition:0.023n
 out_cap:0.0005p:cell_rise:0.02115
 out_cap:0.0012105800p:cell_rise:0.0251
 out_cap:0.002931p:cell_rise:0.03445
@@ -14,7 +14,7 @@ out_cap:0.00709641p:cell_rise:0.05659
 out_cap:0.0171815p:cell_rise:0.10918
 out_cap:0.0415991p:cell_rise:0.23595
 out_cap:0.100718p:cell_rise:0.54259
-input_delay:0.0531329n
+input_transition:0.0531329n
 out_cap:0.0005p:cell_rise:0.02975
 out_cap:0.0012105800p:cell_rise:0.03563
 out_cap:0.002931p:cell_rise:0.04636
@@ -22,7 +22,7 @@ out_cap:0.00709641p:cell_rise:0.06836
 out_cap:0.0171815p:cell_rise:0.1211
 out_cap:0.0415991p:cell_rise:0.248
 out_cap:0.100718p:cell_rise:0.55472
-input_delay:0.122474n
+input_transition:0.122474n
 out_cap:0.0005p:cell_rise:0.04047
 out_cap:0.0012105800p:cell_rise:0.04973
 out_cap:0.002931p:cell_rise:0.06692
@@ -30,7 +30,7 @@ out_cap:0.00709641p:cell_rise:0.09575
 out_cap:0.0171815p:cell_rise:0.14862
 out_cap:0.0415991p:cell_rise:0.2755
 out_cap:0.100718p:cell_rise:0.58228
-input_delay:0.282311n
+input_transition:0.282311n
 out_cap:0.0005p:cell_rise:0.0528
 out_cap:0.0012105800p:cell_rise:0.06685
 out_cap:0.002931p:cell_rise:0.09368
@@ -38,7 +38,7 @@ out_cap:0.00709641p:cell_rise:0.13959
 out_cap:0.0171815p:cell_rise:0.21176
 out_cap:0.0415991p:cell_rise:0.33942
 out_cap:0.100718p:cell_rise:0.64587
-input_delay:0.650743n
+input_transition:0.650743n
 out_cap:0.0005p:cell_rise:0.06592
 out_cap:0.0012105800p:cell_rise:0.0861
 out_cap:0.002931p:cell_rise:0.12553
@@ -46,7 +46,7 @@ out_cap:0.00709641p:cell_rise:0.19602
 out_cap:0.0171815p:cell_rise:0.31089
 out_cap:0.0415991p:cell_rise:0.4859
 out_cap:0.100718p:cell_rise:0.7938
-input_delay:1.5n
+input_transition:1.5n
 out_cap:0.0005p:cell_rise:0.07616
 out_cap:0.0012105800p:cell_rise:0.10447
 out_cap:0.002931p:cell_rise:0.16057
