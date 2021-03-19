@@ -1,8 +1,0 @@
-* SPICE3 file created from inv.ext - technology: sky130A
-
-.option scale=10000u
-
-.subckt inv A Y VGND VPWR VNB VPB
-X0 Y A VGND SUB sky130_fd_pr__nfet_01v8 w=43 l=15
-X1 Y A VPWR VPB sky130_fd_pr__pfet_01v8 w=70 l=15
-.ends
