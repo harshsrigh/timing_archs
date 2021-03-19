@@ -28,13 +28,13 @@ def ng_postscript(meas_type, active_pin, pos_unate):
         control_str = \
     f"""let run  = 0 \n foreach in_delay {input_transition_time}
     * Initiating Text Files in folder data
-    echo "input_transion:$in_delay" >> {working_folder}/input_transion.txt
-    echo "input_transion:$in_delay" >> {working_folder}/cell_fall.txt
-    echo "input_transion:$in_delay" >> {working_folder}/cell_rise.txt
-    echo "input_transion:$in_delay" >> {working_folder}/fall_transition.txt
-    echo "input_transion:$in_delay" >> {working_folder}/rise_transition.txt
-    echo "input_transion:$in_delay" >> {working_folder}/rise_power.txt
-    echo "input_transion:$in_delay" >> {working_folder}/fall_power.txt
+    echo "input_transition:$in_delay" >> {working_folder}/input_transition.txt
+    echo "input_transition:$in_delay" >> {working_folder}/cell_fall.txt
+    echo "input_transition:$in_delay" >> {working_folder}/cell_rise.txt
+    echo "input_transition:$in_delay" >> {working_folder}/fall_transition.txt
+    echo "input_transition:$in_delay" >> {working_folder}/rise_transition.txt
+    echo "input_transition:$in_delay" >> {working_folder}/rise_power.txt
+    echo "input_transition:$in_delay" >> {working_folder}/fall_power.txt
     * 1.666 to match the slew rate
     let actual_rtime = $in_delay*1.666   
 
@@ -59,8 +59,8 @@ def ng_postscript(meas_type, active_pin, pos_unate):
         meas tran ts4 when v({active_pin})=0.36 FALL=1
         let RISE_IN_SLEW = (ts1-ts2)/{time_unit}
         let FALL_IN_SLEW = (ts4-ts3)/{time_unit}
-        echo "actual_rise_slew:$&RISE_IN_SLEW" >> {working_folder}/input_transion.txt
-        echo "actual_fall_slew:$&FALL_IN_SLEW" >> {working_folder}/input_transion.txt
+        echo "actual_rise_slew:$&RISE_IN_SLEW" >> {working_folder}/input_transition.txt
+        echo "actual_fall_slew:$&FALL_IN_SLEW" >> {working_folder}/input_transition.txt
 
 
         print run
@@ -112,7 +112,7 @@ def ng_postscript(meas_type, active_pin, pos_unate):
             if pt1 > pt2 
                 meas tran pt2 when v(Y)=1.79 RISE=3
             end
-            let pwr_stc1 = (@CLOAD[i])*Y
+            let pwr_stc1 = (@CLOAD[i])*Y 
             meas tran pwr_swt1 INTEG pwr_stc1 from=pt1 to=pt2
             let pwr_swt1 = pwr_swt1/1p
             echo "out_cap:$out_cap:power_switch:$&pwr_swt1" >> {working_folder}/rise_power.txt
@@ -120,7 +120,7 @@ def ng_postscript(meas_type, active_pin, pos_unate):
             * Measuring Falling Power if Positive Unate
             meas tran pt1 when v({active_pin})=1.79 FALL=2
             meas tran pt2 when v(Y)=0.1 FALL=2
-            let pwr_stc2 = (@CLOAD[i])*Y
+            let pwr_stc2 = (@CLOAD[i])*Y - (@(VVPWR#branch)*VPWR)
             meas tran pwr_swt2 INTEG pwr_stc2 from=pt1 to=pt2
             let pwr_swt2 = pwr_swt2/1p
             echo "out_cap:$out_cap:power_switch:$&pwr_swt2" >> {working_folder}/fall_power.txt
@@ -140,7 +140,7 @@ def ng_postscript(meas_type, active_pin, pos_unate):
             * Measuring Falling Power if Negative Unate
             meas tran pt1 when v({active_pin})=0.1 RISE=2
             meas tran pt2 when v(Y)=0.1 RISE=2
-            let pwr_stc2 = (@CLOAD[i])*Y
+            let pwr_stc2 = (@CLOAD[i])*Y - (@(VVPWR#branch)*VPWR)
             meas tran pwr_swt2 INTEG pwr_stc2 from=pt1 to=pt2
             let pwr_swt2 = pwr_swt2/1p
             echo "out_cap:$out_cap:power_switch:$&pwr_swt2" >> {working_folder}/fall_power.txt
@@ -309,7 +309,7 @@ def timing_lib(card, timing_list, power_swt_list, inpin_list, cell_dict):
     pwr_pin_txt = '\n\t\t'.join(pwr_pin_list)
     cell_area = cell_dict['area']
     cell_card = f"""cell ("{card}") {{
-        area: {cell_area}
+        area: {cell_area};
         {pwr_pin_txt}
         {input_pin_txt}
         pin ("{output_pins[0]}") {{
@@ -328,12 +328,12 @@ def timing_lib(card, timing_list, power_swt_list, inpin_list, cell_dict):
 
     print(f'Check:  {cell_lib_file}')
     # To Merge File with the Base file
-    # merge_obj = merge.MergeLib(base_file=lib_file, cells_file=cell_lib_file, output_file=merged_file_file)
-    # status = merge_obj.add_cells()
-    # if status:
-    #     print(f'Updated Liberty File: {merged_file_file}')
-    # else:
-    #     print(f'Manually add the timing lib using {cell_lib_file}')
+    merge_obj = merge.MergeLib(base_file=lib_file, cells_file=cell_lib_file, output_file=merged_file_file)
+    status = merge_obj.add_cells()
+    if status:
+        print(f'Updated Liberty File: {merged_file_file}')
+    else:
+        print(f'Manually add the timing lib using {cell_lib_file}')
 
 def lef_extract(lef_file = 'custom_stdcell/nand2_1x/vsdcell_nand2_1x.lef'):
     """ Extract Pin information from the lef file"""
