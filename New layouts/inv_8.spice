@@ -1,0 +1,22 @@
+* SPICE3 file created from inv_8.ext - technology: sky130A
+
+.option scale=10000u
+
+.subckt inv_8 A Y VPWR VGND
+X0 VPWR A Y w_n2_169# sky130_fd_pr__pfet_01v8 w=50 l=15
+X1 VPWR A Y w_n2_169# sky130_fd_pr__pfet_01v8 w=50 l=15
+X2 Y A VPWR w_n2_169# sky130_fd_pr__pfet_01v8 w=50 l=15
+X3 Y A VPWR w_n2_169# sky130_fd_pr__pfet_01v8 w=50 l=15
+X4 VPWR A Y w_n2_169# sky130_fd_pr__pfet_01v8 w=50 l=15
+X5 VPWR A Y w_n2_169# sky130_fd_pr__pfet_01v8 w=50 l=15
+X6 Y A VGND SUB sky130_fd_pr__nfet_01v8 w=42 l=15
+X7 VGND A Y SUB sky130_fd_pr__nfet_01v8 w=42 l=15
+X8 Y A VGND SUB sky130_fd_pr__nfet_01v8 w=42 l=15
+X9 VGND A Y SUB sky130_fd_pr__nfet_01v8 w=42 l=15
+X10 VGND A Y SUB sky130_fd_pr__nfet_01v8 w=42 l=15
+X11 Y A VPWR w_n2_169# sky130_fd_pr__pfet_01v8 w=50 l=15
+X12 Y A VPWR w_n2_169# sky130_fd_pr__pfet_01v8 w=50 l=15
+X13 Y A VGND SUB sky130_fd_pr__nfet_01v8 w=42 l=15
+X14 Y A VGND SUB sky130_fd_pr__nfet_01v8 w=42 l=15
+X15 VGND A Y SUB sky130_fd_pr__nfet_01v8 w=42 l=15
+.ends
