@@ -138,12 +138,12 @@ All of the custom cells used are combination cell(as shown below) and Sequential
 ### Placement
  * Command: `run_placement`
  * Layout:    
-  <img src="images/placement.png" alt="placement" width="450"/>
+    <img src="images/placement.png" alt="placement" width="450"/>
 
 ### CTS
 * Command: `run_cts`
 * Layout:   
-<img src="images/cts.png" alt="placement" width="250"/>
+  <img src="images/cts.png" alt="placement" width="350"/>
 
 ### Routing:
 * Command: `run_routing`
