@@ -107,7 +107,7 @@ library ("sky130_fd_sc_hd__tt_025C_1v80") {
     slew_upper_threshold_pct_rise : 80.000000000;
     switching_power_split_model : "true";
     
-    cell ("sky130_fd_sc_hd__dfxtp_4") {
+    cell ("sky130_vsddfxtp_1") {
         leakage_power () {
             value : 0.0083293000;
             when : "CLK&!D&Q";
@@ -140,7 +140,7 @@ library ("sky130_fd_sc_hd__tt_025C_1v80") {
             value : 0.0088461000;
             when : "!CLK&!D&!Q";
         }
-        area : 23.772800000;
+        area : 20.182800000;
         cell_footprint : "dfxtp";
         cell_leakage_power : 0.0087830730;
         driver_waveform_fall : "ramp";

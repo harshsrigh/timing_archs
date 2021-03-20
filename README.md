@@ -119,9 +119,9 @@ Calculate the Fall time, Rise time, Fall Transition and Rise Transition.
 * Install OpenLane as mentioned in repo [OpenLANE Built Script](https://github.com/nickson-jose/openlane_build_script)
 * [OpenLane Workshop repo for understanding openLane flow](https://github.com/harshsrigh/openlane_sky130nm_vsdworkshop)
 ### Custom Cells and Skywater 130nm Cells:
-All of the custom cells used are combination cell(as shown below) and Sequential cell like D Flip-Flop is taken from Skywater 130nm Library for now.
-  * **Skywater Library cells**: sky130_fd_sc_hd__dfxtp_4,  sky130_fd_sc_hd__buf_2, and sky130_fd_sc_hd__conb_1.
-  * **Custom cells**: sky130_vsdbuf_1x, sky130_vsdbuf_2x, sky130_vsdclkbuf_4x, sky130_vsdinv_1x, sky130_vsdinv_8x, sky130_vsdnand2_1x, sky130_vsdnand3_1x, sky130_vsdnand4_1x and sky130_vsdo21ai_1x.     
+
+  * **Skywater Library cells**: sky130_fd_sc_hd__buf_2, and sky130_fd_sc_hd__conb_1.
+  * **Custom cells**: sky130_vsdbuf_1x, sky130_vsdbuf_2x, sky130_vsdclkbuf_4x, sky130_vsdinv_1x, sky130_vsdinv_8x, sky130_vsdnand2_1x, sky130_vsdnand3_1x, sky130_vsdnand4_1x, sky130_vsdo21ai_1x and sky130_vsddfxtp_1.     
 * **Liberty File**: [sky_mod1.lib](sta_results/sky_mod1.lib)    
 
 ### Synthesis
