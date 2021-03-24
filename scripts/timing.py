@@ -131,8 +131,39 @@ def read_spicetxt(filepath, in_size=7):
 
     return input_transition, output_cap[:cap_size], timing_vector_2d
 
+def read_seq_timing(file_loc):
+    with open(file_loc, "r") as file_object:
+        # read file content
+        data = file_object.read()
+    
+    clk_tran = []
+    d_tran = []
+    seq_timing = []
+    for per_in_data in data.split('\n'):
+        agr_data = per_in_data.split(':')
+        # print(agr_data)
+        if len(agr_data) == 8:
+            if agr_data[0] == 'clk_tran':
+                in_delay_val = re.sub('[a-z]+', '', agr_data[1])
+                clk_tran.append(liberty_float(in_delay_val))
+                seq_timing.append(liberty_float(agr_data[-3]))
 
-def timing_generator(files_folder, unate, related_pin='A'):
+        elif len(agr_data) == 2:
+            if agr_data[0] == 'd_tran':
+                d_tran_val = re.sub('[a-z]+', '', agr_data[1])
+                d_tran.append(liberty_float(d_tran_val))
+
+    # Size of constraint Vector
+    clk_tran_size = len(list(set(clk_tran)))
+    # Size of related pin Vector
+    d_tran_size = len(d_tran)
+    # Resizing timing 1-D vector to 2-D
+    timing_vector_2d = np.array(seq_timing)
+    timing_vector_2d.resize(clk_tran_size, d_tran_size)
+    timing_vector_2d = np.transpose(timing_vector_2d)
+    return d_tran, clk_tran[:clk_tran_size], timing_vector_2d           
+                
+def timing_generator(files_folder, unate, related_pin='A', timing_type='combinational'):
     """Generates the timing block in .lib format  """
     # TODO: Make Global variable
     attributes_names = ['cell_fall', 'cell_rise',
@@ -156,7 +187,7 @@ def timing_generator(files_folder, unate, related_pin='A'):
                 related_pin : "{related_pin.upper()}";
                 {timing_tables[3]}
                 timing_sense : "{unate}";
-                timing_type : "combinational";
+                timing_type : "{timing_type}";
             }} """
 
     power_str = \
@@ -181,6 +212,7 @@ def gen_lib(in_rises, out_caps, data_table, attr_name, type_sim= 'timing'):
     
     if type_sim == 'timing': lut = f'del_1_{in_size}_{out_size}'
     elif type_sim == 'power': lut = 'power_outputs_1'
+    elif type_sim == 'dff': lut = 'vio_3_3_1'
 
     data_cell = f"""{attr_name} ("{lut}") {{
                     index_1("{in_rises_str}");
@@ -230,6 +262,48 @@ def input_pins(file_path, active_pin, max_tran):
     
     return pin_internal
 
+def input_pins_seq(file_path, active_pin, max_tran, extra_data='', clock_check=False):
+    """Sets up the input pins information for the cell group in dff """
+    clock_state = 'false' if not clock_check else 'true'
+    max_tran_format = liberty_float(max_tran)
+    file_path_loc = path.join(file_path, 'input_pins_caps.txt')
+    with open(file_path_loc, 'r') as fop:
+        data = fop.read()
+    
+    for row in data.split('\n'):
+        row_sp = row.split(':')
+        if len(row_sp) == 3:
+            active_pin = row_sp[0]
+            if 'fall' in row:
+                fall_cap = row_sp[-1]
+            elif 'rise' in row:
+                rise_cap = row_sp[-1]
+    
+    try:
+        avg_cap = (float(fall_cap)+float(rise_cap))/2
+        avg_cap_format = liberty_float(avg_cap)
+        fall_cap_format = liberty_float(fall_cap)
+        rise_cap_format = liberty_float(rise_cap)
+    except:
+        avg_cap = 'Manual'
+        avg_cap_format =  'Manual'
+        fall_cap_format = 'Manual'
+        rise_cap_format = 'Manual'
+
+    pin_internal = \
+        f"""pin ("{active_pin}") {{
+            capacitance : {avg_cap_format};
+            clock : "{clock_state}";
+            direction : "input";
+            fall_capacitance : {fall_cap_format};
+            max_transition : {max_tran_format};
+            related_ground_pin : "VGND";
+            related_power_pin : "VPWR";
+            rise_capacitance : {rise_cap_format};
+            {extra_data}
+        }}"""
+    
+    return pin_internal
 
 if __name__ == '__main__':
     file_location = '/home/hshukla3/timing_archs/custom_stdcell/or2_0/data/input_caps/input_pins_caps.txt'
