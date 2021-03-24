@@ -10,12 +10,11 @@ MACRO sky130_vsdinv_1x
   SYMMETRY X Y R90 ;
   SITE unithd ;
   PIN A
-    DIRECTION INPUT ;
-    USE SIGNAL ;
     ANTENNAGATEAREA 0.169500 ;
     PORT
       LAYER li1 ;
-        RECT 0.360 1.140 0.600 1.490 ;
+        RECT 0.160 1.140 0.580 1.490 ;
+        RECT 0.170 1.130 0.580 1.140 ;
     END
   END A
   PIN Y

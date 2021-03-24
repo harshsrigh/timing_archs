@@ -1,6 +1,6 @@
 magic
 tech sky130A
-timestamp 1616146321
+timestamp 1616210302
 << nwell >>
 rect -13 146 180 288
 << nmos >>
@@ -61,22 +61,22 @@ rect 129 -8 146 10
 rect 41 236 56 249
 rect 111 236 126 249
 rect 41 128 56 166
-rect 111 147 126 166
-rect 88 142 126 147
+rect 111 128 126 166
 rect 34 123 67 128
 rect 34 105 42 123
 rect 59 105 67 123
-rect 88 124 96 142
-rect 113 124 126 142
-rect 88 119 126 124
 rect 34 100 67 105
+rect 88 123 126 128
+rect 88 105 96 123
+rect 113 105 126 123
+rect 88 100 126 105
 rect 41 83 56 100
-rect 111 83 126 119
+rect 111 83 126 100
 rect 41 27 56 40
 rect 111 27 126 40
 << polycont >>
 rect 42 105 59 123
-rect 96 124 113 142
+rect 96 105 113 123
 << locali >>
 rect 0 281 169 287
 rect 0 263 22 281
@@ -98,14 +98,14 @@ rect 128 175 132 228
 rect 149 175 164 228
 rect 128 166 164 175
 rect 0 83 17 166
-rect 88 142 121 147
 rect 34 123 67 128
 rect 34 105 42 123
 rect 59 105 67 123
-rect 88 124 96 142
-rect 113 124 121 142
-rect 88 119 121 124
 rect 34 100 67 105
+rect 88 123 121 128
+rect 88 105 96 123
+rect 113 105 121 123
+rect 88 100 121 105
 rect 146 118 164 166
 rect 146 83 164 101
 rect 0 79 36 83
@@ -170,13 +170,13 @@ flabel metal1 19 260 149 284 0 FreeSans 120 0 0 0 VPWR
 port 4 nsew power bidirectional
 flabel nwell 19 260 149 284 0 FreeSans 120 0 0 0 VPB
 port 5 nsew power bidirectional
-flabel locali 88 119 121 147 0 FreeSans 120 0 0 0 A
-port 1 nsew signal input
 flabel locali 0 79 17 175 0 FreeSans 120 0 0 0 Y
 port 2 nsew signal output
+flabel locali 88 100 121 128 0 FreeSans 120 0 0 0 A
+port 1 nsew signal input
 << properties >>
-string LEFclass CORE
 string LEFsite unithd
+string LEFclass CORE
 string FIXED_BBOX 0 0 169 272
 string LEFsymmetry X Y R90
 << end >>

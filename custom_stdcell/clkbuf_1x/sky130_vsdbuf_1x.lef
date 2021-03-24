@@ -2,9 +2,9 @@ VERSION 5.7 ;
   NOWIREEXTENSIONATPIN ON ;
   DIVIDERCHAR "/" ;
   BUSBITCHARS "[]" ;
-MACRO sky130_vsdclkbuf_1x
+MACRO sky130_vsdbuf_1x
   CLASS CORE ;
-  FOREIGN sky130_vsdclkbuf_1x ;
+  FOREIGN sky130_vsdbuf_1x ;
   ORIGIN 0.000 0.000 ;
   SIZE 1.690 BY 2.720 ;
   SYMMETRY X Y R90 ;
@@ -15,7 +15,7 @@ MACRO sky130_vsdclkbuf_1x
     ANTENNAGATEAREA 0.169500 ;
     PORT
       LAYER li1 ;
-        RECT 0.880 1.190 1.210 1.470 ;
+        RECT 0.880 1.000 1.210 1.280 ;
     END
   END A
   PIN Y
@@ -84,6 +84,6 @@ MACRO sky130_vsdclkbuf_1x
         RECT 0.340 1.000 1.680 1.170 ;
         RECT 1.410 0.950 1.680 1.000 ;
   END
-END sky130_vsdclkbuf_1x
+END sky130_vsdbuf_1x
 END LIBRARY
 
