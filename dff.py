@@ -16,7 +16,7 @@ input_transition_timing = '0.01n 0.023n 0.0531329n 0.122474n 0.282311n 0.650743n
 load_capacitor = '0.0005p 0.0012105800p 0.002931p 0.00709641p 0.0171815p 0.0415991p 0.100718p'
 runs = 20  # Bisection method num of iterations
 #
-
+merged_file = ''
 output_dir = ''
 
 
@@ -157,14 +157,14 @@ def pins_verification(spice_pins_str, lef_pins_list):
             exit(0)
 
 
-def Simulation_env(spice_file, edge_type, netlist_pins, spice_card, input_pin, out_pin, clk_pin, sim_type):
+def Simulation_env(spice_file, edge_type, netlist_pins, spice_card, act_pin, out_pin, clk_pin, sim_type):
     """Creates *.cir file"""
 
     include_statements = f".include 'sky130nm.lib' \n.include '{spice_file}'"
 
-    power, signal = voltage_deductions(input_pin, clk_pin, netlist_pins)
+    power, signal = voltage_deductions(act_pin, clk_pin, netlist_pins)
 
-    control_text, working_folder = ng_postscript(sim_type, input_pin,
+    control_text, working_folder = ng_postscript(sim_type, act_pin,
                                                  out_pin, clk_pin, edge_type)
     harness_name = f"{sim_type}_harness.cir"
     harness_file = path.join(output_dir, harness_name)
@@ -205,7 +205,8 @@ def voltage_deductions(active_pin, clk_pin, netlist_pins):
 
     # Setting Up Signal Voltages
     signal_supplies = f'V{active_pin} {active_pin} 0 PULSE(0 {VDD} 6n 0.01n 0.01n 10ns 20ns)'
-    clk_supp = f'\nV{clk_pin} {clk_pin} 0 PULSE(0 {VDD} 0 0.01n 0.01n 15ns 30ns)' if active_pin != clk_pin else ''
+     # TODO:Correct this using input pin for clock calculations, remove hardcoded VD supply
+    clk_supp = f'\nV{clk_pin} {clk_pin} 0 PULSE(0 {VDD} 0 0.01n 0.01n 15ns 30ns)' if active_pin != clk_pin else '\nVD D 0 0'
     signal_supplies += clk_supp
     power_supplies = power_str + '\n' + gnd_str
 
@@ -651,14 +652,14 @@ def ng_postscript(sim_type, active_pin, out_pin, clk_pin, edge_type):
         print crise
         echo "out_cap:$out_cap:cell_rise:$&crise" >> {working_folder}/cell_rise.txt
 
-        * Measuring Fall Transion Time @ 80-20% of VDD(1.8V)
+        * Measuring Fall transition Time @ 80-20% of VDD(1.8V)
         meas tran fall_tran trig v({out_pin}) val=1.44 fall=1 targ v({out_pin}) val=0.36 fall=1
         meas tran fall_tran trig v({out_pin}) val=1.44 fall=1 targ v({out_pin}) val=0.36 fall=2
         let fall_tran = fall_tran/1n
         print fall_tran
         echo "out_cap:$out_cap:fall_transition:$&fall_tran" >> {working_folder}/fall_transition.txt
         
-        * Measuring Rise Transion Time @ 20-80% of VDD(1.8V) 
+        * Measuring Rise transition Time @ 20-80% of VDD(1.8V) 
         meas tran rt1 when v({out_pin})=1.44 RISE=1 
         meas tran rt2 when v({out_pin})=0.36 RISE=1
         let rise_tran = ((rt1-rt2)/1e-09)
@@ -696,7 +697,8 @@ def ng_postscript(sim_type, active_pin, out_pin, clk_pin, edge_type):
         ext_folder = f'data/{active_pin}/input_caps'
         working_folder = path.join(output_dir, ext_folder)
         control_str = \
-            f"""foreach case 1.8 0
+            f""" shell rm {working_folder}/input_pins_caps.txt
+            foreach case 1.8 0
     if $case=0
         * Fall Condition
         reset
@@ -734,7 +736,7 @@ def ngspice_lunch(file_loc, working_folder, skip_sim):
         subprocess.call(["ngspice", '-b', '-r rawfile.raw', file_loc])
         print('Finished Simulation')
     else:
-        print('Simulation Skiped as per the -fs_sim tag')
+        print(f'Simulation file run: {file_loc} \nSkiped as per the -fs_sim tag')
 
 
 def format_seq_timing(txt_loc, edge_type=1):
@@ -785,18 +787,33 @@ def format_seq_timing(txt_loc, edge_type=1):
 
     timing_str = \
         f"""timing () {{
-            {lut_table_list[0]}
-            related_pin : "CLK";
-            {lut_table_list[1]}
-            sim_opt : "runlvl=5 accurate=1";
-            timing_type : "{seq_timing_type}_{clk_type}";
-            violation_delay_degrade_pct : 10.000000000;
+                {lut_table_list[1]}
+                related_pin : "CLK";
+                {lut_table_list[0]}
+                sim_opt : "runlvl=5 accurate=1";
+                timing_type : "{seq_timing_type}_{clk_type}";
+                violation_delay_degrade_pct : 10.000000000;
             }} """
 
     return timing_str
 
+def ff_block_gen(clock_pin, edge_type, next_state_func):
+    """ Used to to generate ff {} block
+        As of now, limited to simple DFF without Async pins
+    """
+    if edge_type == 1:
+        clock_type = clock_pin
+    else:
+        clock_type = clock_pin + '\''
 
-def timing_lib(cell_directory, card, timing_list, power_swt_list, inpin_list, cell_dict, cell_footprint):
+    str_ff = \
+        f"""ff ("IQ","IQ_N") {{
+            clocked_on : "{clock_type}";
+            next_state : "{next_state_func}";
+        }} """
+    return str_ff
+
+def timing_lib(cell_directory, card, timing_list, power_swt_list, inpin_list, cell_dict, cell_footprint, ff_block_str):
     """ Generate .lib file """
 
     cell_lib_file = path.join(cell_directory, 'timing.lib')
@@ -804,9 +821,11 @@ def timing_lib(cell_directory, card, timing_list, power_swt_list, inpin_list, ce
     power_swt_txt = '\n\t\t\t'.join(power_swt_list)
     input_pin_txt = '\n\t\t'.join(inpin_list)
     cell_area = cell_dict['area']
-    cell_card = f"""cell ("{card}") {{
+    cell_name = cell_dict['cell_name']
+    cell_card = f"""cell ("{cell_name}") {{
         area: {cell_area};
         cell_footprint: "{cell_footprint}";
+        {ff_block_str}
         pg_pin ("VGND"){{
             pg_type : "primary_ground";
             voltage_name : "VGND";
@@ -840,30 +859,34 @@ def timing_lib(cell_directory, card, timing_list, power_swt_list, inpin_list, ce
 
     print(f'Check:  {cell_lib_file}')
     # To Merge File with the Base file
-    # merge_obj = merge.MergeLib(base_file=lib_file, cells_file=cell_lib_file, output_file=merged_file_file)
-    # status = merge_obj.add_cells()
-    # if status:
-    #     print(f'Updated Liberty File: {merged_file_file}')
-    # else:
-    #     print(f'Manually add the timing lib using {cell_lib_file}')
+    if merged_file != '':
+        merge_obj = merge.MergeLib(base_file=merged_file, cells_file=cell_lib_file, output_file=merged_file)
+        status = merge_obj.add_cells()
+        if status:
+            print(f'Updated Liberty File: {merged_file}')
+        else:
+            print(f'Manually add the timing lib using {cell_lib_file}')
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description="Simple D Flip-Flop Timing characterization")
 
-    parser.add_argument('-lef', metavar='lef',
+    parser.add_argument('-lef', metavar='--lef_file',
                         help='Enter the D Flip Flop .lef file location', type=str, required=True)
-    parser.add_argument('-sp', metavar='SPICE',
+    parser.add_argument('-sp', metavar='--SPICE',
                         help='Enter the Spice file with extracted PEX spice file', type=str, required=True)
-    parser.add_argument('-o', metavar='output',
-                        help='Enter the location for the output', type=str)
-    parser.add_argument('-fs_sim', metavar='skipsim',
-                        help='Assign True or False in order to skip the simulation', type=bool, default=False)
-    arg_var = parser.parse_args(
-        ['-lef', 'custom_stdcell/dftxp_1x/sky130_vsddfxtp_1.lef',
-         '-sp', 'custom_stdcell/dftxp_1x/sky130_vsddfxtp_1.spice',
-         '-fs_sim', 'True'])
+    parser.add_argument('-lib', metavar='--output_lib',
+                        help='Enter the output lib file to merge this cell', type=str, default='')
+    parser.add_argument('-fs_sim', metavar='--skip_sim',
+                        help='Assign 1 in order to skip the simulation, Use this only if Simulation data exists in "data" folder', type=bool, default=False)
+    
+    # Use for Debugging
+    # arg_var = parser.parse_args(
+    #     ['-lef', 'custom_stdcell/dftxp_1x/sky130_vsddfxtp_1.lef',
+    #      '-sp', 'custom_stdcell/dftxp_1x/sky130_vsddfxtp_1.spice',
+    #      '-fs_sim', '1'])
+    arg_var = parser.parse_args()
     output_dir = path.split(arg_var.sp)[0]
 
     lef_pins_list, lef_dict, input_pins, output_pins = display_lef(
@@ -880,13 +903,13 @@ if __name__ == '__main__':
         print('[Error] Enter the edge trigger as per the options')
 
     # Flip-Flop Output Function
-    print('\n[User Input] \nEnter Output function of the Flip-Flop:')
+    print('\n[User Input] \nEnter Next State function of the Flip-Flop:')
     next_clk = 'D'
     # Cell Foot-Print
     print('\n[User Input] \nEnter Cell footprint name (example: dfxtp, dfxtn):')
     cell_footprint = 'dfxtp'
 
-    clk_pin = 'clk'  # Temporary Coded
+    clk_pin = 'CLK'  # Temporary Coded 
 
     timing_list = []
     power_swt_list = []
@@ -949,9 +972,8 @@ if __name__ == '__main__':
                                                   sim_type='input_caps')
             ngspice_lunch(cir_file, cir_folder, arg_var.fs_sim)
 
-            # 1.5n is hardcoded for now( Maximum input transition time)
-            extra_data = f'{hold_timing}\n\t\t\t{setup_timing}'
-
+            extra_data = f'{setup_timing}\n\t\t\t{hold_timing}'
+             # Caution: 1.5n is hardcoded for now( Maximum input transition time)
             pin_info_input = timing.input_pins_seq(cir_folder, act_pin,
                                                    '1.5', extra_data,
                                                    clock_check=False)
@@ -964,6 +986,7 @@ if __name__ == '__main__':
     ngspice_lunch(cir_file, cir_folder, arg_var.fs_sim)
     pin_info_clk = timing.input_pins_seq(cir_folder, clk_pin, '1.5', clock_check=True)
     pins_list.append(pin_info_clk)
-
+    ff_block = ff_block_gen(clk_pin, edge_type, next_clk)
+    merged_file = arg_var.lib
     timing_lib(output_dir, spice_card, timing_list, power_swt_list,
-               pins_list, lef_dict, cell_footprint)
+               pins_list, lef_dict, cell_footprint, ff_block)
