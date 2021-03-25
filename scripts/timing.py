@@ -199,7 +199,6 @@ def timing_generator(files_folder, unate, related_pin='A', timing_type='combinat
 
     return timing_str, power_str
 
-
 def gen_lib(in_rises, out_caps, data_table, attr_name, type_sim= 'timing'):
     """Format the each attribute content in .lib format """
     in_size = len(in_rises)

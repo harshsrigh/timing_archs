@@ -88,14 +88,14 @@ def ng_postscript(meas_type, active_pin, pos_unate):
         print crise
         echo "out_cap:$out_cap:cell_rise:$&crise" >> {working_folder}/cell_rise.txt
 
-        * Measuring Fall Transion Time @ 80-20% of VDD(1.8V) 
+        * Measuring Fall transition Time @ 80-20% of VDD(1.8V) 
         meas tran ft1 when v(Y)=1.44 FALL=2 
         meas tran ft2 when v(Y)=0.36 FALL=2
         let fall_tran = (ft2-ft1)/{time_unit}
         print fall_tran
         echo "out_cap:$out_cap:fall_transition:$&fall_tran" >> {working_folder}/fall_transition.txt
         
-        * Measuring Rise Transion Time @ 20-80% of VDD(1.8V) 
+        * Measuring Rise transition Time @ 20-80% of VDD(1.8V) 
         meas tran rt1 when v(Y)=1.44 RISE=2 
         meas tran rt2 when v(Y)=0.36 RISE=2
         let rise_tran = ((rt1-rt2)/{time_unit})

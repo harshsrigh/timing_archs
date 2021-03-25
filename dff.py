@@ -205,7 +205,7 @@ def voltage_deductions(active_pin, clk_pin, netlist_pins):
 
     # Setting Up Signal Voltages
     signal_supplies = f'V{active_pin} {active_pin} 0 PULSE(0 {VDD} 6n 0.01n 0.01n 10ns 20ns)'
-     # TODO:Correct this using input pin for clock calculations, remove hardcoded VD supply
+    # TODO:Correct this using input pin for clock calculations, remove hardcoded VD supply
     clk_supp = f'\nV{clk_pin} {clk_pin} 0 PULSE(0 {VDD} 0 0.01n 0.01n 15ns 30ns)' if active_pin != clk_pin else '\nVD D 0 0'
     signal_supplies += clk_supp
     power_supplies = power_str + '\n' + gnd_str
@@ -736,7 +736,8 @@ def ngspice_lunch(file_loc, working_folder, skip_sim):
         subprocess.call(["ngspice", '-b', '-r rawfile.raw', file_loc])
         print('Finished Simulation')
     else:
-        print(f'Simulation file run: {file_loc} \nSkiped as per the -fs_sim tag')
+        print(
+            f'Simulation file run: {file_loc} \nSkiped as per the -fs_sim tag')
 
 
 def format_seq_timing(txt_loc, edge_type=1):
@@ -797,6 +798,7 @@ def format_seq_timing(txt_loc, edge_type=1):
 
     return timing_str
 
+
 def ff_block_gen(clock_pin, edge_type, next_state_func):
     """ Used to to generate ff {} block
         As of now, limited to simple DFF without Async pins
@@ -812,6 +814,7 @@ def ff_block_gen(clock_pin, edge_type, next_state_func):
             next_state : "{next_state_func}";
         }} """
     return str_ff
+
 
 def timing_lib(cell_directory, card, timing_list, power_swt_list, inpin_list, cell_dict, cell_footprint, ff_block_str):
     """ Generate .lib file """
@@ -860,7 +863,8 @@ def timing_lib(cell_directory, card, timing_list, power_swt_list, inpin_list, ce
     print(f'Check:  {cell_lib_file}')
     # To Merge File with the Base file
     if merged_file != '':
-        merge_obj = merge.MergeLib(base_file=merged_file, cells_file=cell_lib_file, output_file=merged_file)
+        merge_obj = merge.MergeLib(
+            base_file=merged_file, cells_file=cell_lib_file, output_file=merged_file)
         status = merge_obj.add_cells()
         if status:
             print(f'Updated Liberty File: {merged_file}')
@@ -880,7 +884,7 @@ if __name__ == '__main__':
                         help='Enter the output lib file to merge this cell', type=str, default='')
     parser.add_argument('-fs_sim', metavar='--skip_sim',
                         help='Assign 1 in order to skip the simulation, Use this only if Simulation data exists in "data" folder', type=bool, default=False)
-    
+
     # Use for Debugging
     # arg_var = parser.parse_args(
     #     ['-lef', 'custom_stdcell/dftxp_1x/sky130_vsddfxtp_1.lef',
@@ -896,7 +900,7 @@ if __name__ == '__main__':
 
     # User Input for CLK edge trigger type
     print('\n[User Input] \nType of edge trigger \nEnter 1 for Positive Edge Triggered and 2 for Negative Edge Triggered')
-    edge_type = 1
+    edge_type = input()
     try:
         edge_type = int(edge_type)
     except:
@@ -904,12 +908,12 @@ if __name__ == '__main__':
 
     # Flip-Flop Output Function
     print('\n[User Input] \nEnter Next State function of the Flip-Flop:')
-    next_clk = 'D'
+    next_clk = input()
     # Cell Foot-Print
     print('\n[User Input] \nEnter Cell footprint name (example: dfxtp, dfxtn):')
-    cell_footprint = 'dfxtp'
+    cell_footprint = input()
 
-    clk_pin = 'CLK'  # Temporary Coded 
+    clk_pin = 'CLK'  # Temporary Coded
 
     timing_list = []
     power_swt_list = []
@@ -973,7 +977,7 @@ if __name__ == '__main__':
             ngspice_lunch(cir_file, cir_folder, arg_var.fs_sim)
 
             extra_data = f'{setup_timing}\n\t\t\t{hold_timing}'
-             # Caution: 1.5n is hardcoded for now( Maximum input transition time)
+            # Caution: 1.5n is hardcoded for now( Maximum input transition time)
             pin_info_input = timing.input_pins_seq(cir_folder, act_pin,
                                                    '1.5', extra_data,
                                                    clock_check=False)
@@ -984,7 +988,8 @@ if __name__ == '__main__':
                                           clk_pin, out_pin, clk_pin,
                                           sim_type='input_caps')
     ngspice_lunch(cir_file, cir_folder, arg_var.fs_sim)
-    pin_info_clk = timing.input_pins_seq(cir_folder, clk_pin, '1.5', clock_check=True)
+    pin_info_clk = timing.input_pins_seq(cir_folder, clk_pin,
+                                         '1.5', clock_check=True)
     pins_list.append(pin_info_clk)
     ff_block = ff_block_gen(clk_pin, edge_type, next_clk)
     merged_file = arg_var.lib
